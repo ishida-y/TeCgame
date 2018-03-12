@@ -3,7 +3,7 @@
 
 const bool GameSystem::debug = true;
 
-GameSystem::GameSystem(){
+GameSystem::GameSystem() {
 
 }
 
@@ -14,7 +14,7 @@ void GameSystem::update() {
 
 
 KeyInput::KeyInput() :
-	enter(XInput(0).buttonA, Gamepad(0).button(2), Input::KeyZ),
+	enter(XInput(0).buttonA, Gamepad(0).button(2), Input::KeySpace),
 	back(XInput(0).buttonB, Gamepad(0).button(1), Input::KeyX),
 	janp(XInput(0).buttonA, Gamepad(0).button(2), Input::KeyZ),
 	triggerR(0),
@@ -68,7 +68,7 @@ Button::Button(s3d::Key _Xcon, s3d::Key _pad, s3d::Key _key) :
 }
 
 void Button::update() {
-	
+
 	if (XInput(0).isConnected()) {
 		clicked = Xcon.clicked;
 		pressed = Xcon.pressed;

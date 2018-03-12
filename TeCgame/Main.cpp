@@ -1,14 +1,26 @@
 ﻿
-# include <Siv3D.hpp>
+#include<Siv3D.hpp>
+#include<HamFramework.hpp>
+
+#include"Title.h"
+#include"Action.h"
+#include"Select.h"
+#include"GameSystem.h"
+
 
 void Main()
 {
-	const Font font(30);
+
+	SceneManager<String> manager;
+
+	manager.add<Title>(L"Title");
+	manager.add<Action>(L"Action");
+	manager.add<Select>(L"Select");
 
 	while (System::Update())
 	{
-		font(L"ようこそ、Siv3D の世界へ！").draw();
-
-		Circle(Mouse::Pos(), 50).draw({ 255, 0, 0, 127 });
+		ClearPrint();
+		GameSystem::get().update();
+		manager.updateAndDraw();
 	}
 }

@@ -1,40 +1,5 @@
 #pragma once
-# include <Siv3D.hpp>
-
-class GameSystem {
-public:
-	static GameSystem& get() {
-		static GameSystem inst;
-		return inst;
-	}
-	void update();
-
-	KeyInput input;
-	SoundManager sound;
-
-	static const bool debug;
-
-private:
-	GameSystem();
-	GameSystem(const GameSystem& r) {}
-	GameSystem& operator=(const GameSystem& r) {}
-};
-
-
-
-class KeyInput {
-public:
-	Button enter;
-	Button back;
-	Button janp;
-	double triggerR;
-	double triggerL;
-	Stick stick;
-
-	KeyInput();
-	void update();
-};
-
+#include <Siv3D.hpp>
 
 
 class Button {
@@ -65,9 +30,47 @@ public:
 
 
 
+//ボタンを増やすときはBottonのインスタンスを増やし、
+//コンストラクタでキー設定を行いアップデートを追加する
+class KeyInput {
+public:
+	Button enter;
+	Button back;
+	Button janp;
+	double triggerR;
+	double triggerL;
+	Stick stick;
+
+	KeyInput();
+	void update();
+};
+
+
+
 class SoundManager {
 public:
 	int bgm;
 	int se;
 	SoundManager();
+};
+
+
+
+class GameSystem {
+public:
+	static GameSystem& get() {
+		static GameSystem inst;
+		return inst;
+	}
+	void update();
+
+	KeyInput input;
+	SoundManager sound;
+
+	static const bool debug;
+
+private:
+	GameSystem();
+	GameSystem(const GameSystem& r) {}
+	GameSystem& operator=(const GameSystem& r) {}
 };
