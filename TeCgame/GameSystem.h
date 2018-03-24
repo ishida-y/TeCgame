@@ -37,6 +37,8 @@ public:
 	Button enter;
 	Button back;
 	Button janp;
+	Button zoomIn;
+	Button zoomOut;
 	double triggerR;
 	double triggerL;
 	Stick stick;

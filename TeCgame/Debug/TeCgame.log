@@ -1,10 +1,5 @@
-﻿cl : コマンド ライン warning D9030: '/Gm' はマルチプロセシングと互換性がありません。/MP スイッチを無視します
-  Title.cpp
-c:\users\iy\documents\tecgame\tecgame\gamesystem.h(74): warning C4100: 'r': 引数は関数の本体部で 1 度も参照されません。
-c:\users\iy\documents\tecgame\tecgame\gamesystem.h(75): warning C4100: 'r': 引数は関数の本体部で 1 度も参照されません。
-  Main.cpp
-c:\users\iy\documents\tecgame\tecgame\gamesystem.h(74): warning C4100: 'r': 引数は関数の本体部で 1 度も参照されません。
-c:\users\iy\documents\tecgame\tecgame\gamesystem.h(75): warning C4100: 'r': 引数は関数の本体部で 1 度も参照されません。
-  コードを生成中...
+﻿  Camera.cpp
+c:\users\iy\documents\tecgame\tecgame\gamesystem.h(76): warning C4100: 'r': 引数は関数の本体部で 1 度も参照されません。
+c:\users\iy\documents\tecgame\tecgame\gamesystem.h(77): warning C4100: 'r': 引数は関数の本体部で 1 度も参照されません。
   TeCgame.vcxproj -> C:\Users\IY\Documents\TeCgame\TeCgame\Debug\TeCgame.exe
   TeCgame.vcxproj -> C:\Users\IY\Documents\TeCgame\TeCgame\Debug\TeCgame.pdb (Full PDB)

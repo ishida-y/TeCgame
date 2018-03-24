@@ -17,6 +17,8 @@ KeyInput::KeyInput() :
 	enter(XInput(0).buttonA, Gamepad(0).button(2), Input::KeySpace),
 	back(XInput(0).buttonB, Gamepad(0).button(1), Input::KeyX),
 	janp(XInput(0).buttonA, Gamepad(0).button(2), Input::KeyZ),
+	zoomIn(XInput(0).buttonUp, Gamepad(0).povForward, Input::KeyBackslash),
+	zoomOut(XInput(0).buttonDown, Gamepad(0).povBackward, Input::KeySlash),
 	triggerR(0),
 	triggerL(0) {
 	XInput(0).setRightTriggerDeadZone();
@@ -27,6 +29,8 @@ void KeyInput::update() {
 	enter.update();
 	back.update();
 	janp.update();
+	zoomIn.update();
+	zoomOut.update();
 	if (XInput(0).isConnected()) {
 		triggerR = XInput(0).rightTrigger;
 		triggerL = XInput(0).leftTrigger;
