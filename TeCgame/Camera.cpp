@@ -21,7 +21,7 @@ void CameraManager::update(Vec2 player) {
 	if (GameSystem::get().input.zoomOut.clicked && t_scale > 0.7) {
 		t_scale -= 0.2;
 	}
-	//イーズ
+	//イーズ処理
 	pos = ease * pos + (1 - ease) * t_pos;
 	scale = ease * scale + (1 - ease) * t_scale;
 }
