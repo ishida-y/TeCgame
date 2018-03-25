@@ -1,14 +1,15 @@
 #include "Map.h"
 
 Object::Object(PhysicsWorld& world, RectF _range) :
-	pos(_range.pos + range.size / 2.0),
 	range(_range),
-	body(world.createRect(Vec2(0, 0), _range, PhysicsMaterial(1.0, 0.01, 0.0), none, PhysicsBodyType::Static)) {
+	pos(_range._get_center()),
+	body(world.createRect(Vec2(0, 0), _range, PhysicsMaterial(1.0, 0.0, 0.0), none, PhysicsBodyType::Static)) {
 
 }
 
 void Object::draw() const {
 	range.draw();
+	Circle(pos, 5.0/100.0).draw(Palette::Red);
 }
 
 

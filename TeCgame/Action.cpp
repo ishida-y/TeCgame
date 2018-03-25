@@ -16,6 +16,10 @@ void Action::init() {
 
 }
 
+//void Action::updateFadeIn() {
+//
+//}
+
 void Action::update() {
 	if (GameSystem::get().input.enter.clicked == true) {
 		changeScene(L"Title");

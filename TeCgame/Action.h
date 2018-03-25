@@ -18,7 +18,7 @@ public:
 
 	Action();
 	void init() override;
-
+	//void updateFadeIn() override;
 	void update() override;
 
 	void draw() const override;

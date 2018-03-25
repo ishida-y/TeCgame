@@ -1,5 +1,6 @@
-﻿  Camera.cpp
+﻿  Player.cpp
 c:\users\iy\documents\tecgame\tecgame\gamesystem.h(76): warning C4100: 'r': 引数は関数の本体部で 1 度も参照されません。
 c:\users\iy\documents\tecgame\tecgame\gamesystem.h(77): warning C4100: 'r': 引数は関数の本体部で 1 度も参照されません。
+c:\users\iy\documents\tecgame\tecgame\player.cpp(21): warning C4100: 'enemymanager': 引数は関数の本体部で 1 度も参照されません。
   TeCgame.vcxproj -> C:\Users\IY\Documents\TeCgame\TeCgame\Debug\TeCgame.exe
   TeCgame.vcxproj -> C:\Users\IY\Documents\TeCgame\TeCgame\Debug\TeCgame.pdb (Full PDB)

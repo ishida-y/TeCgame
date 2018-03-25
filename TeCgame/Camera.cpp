@@ -6,14 +6,14 @@ CameraManager::CameraManager(Vec2 player) :
 	t_pos(Window::Center() - player),
 	scale(1.0),
 	t_scale(1.0),
-	ease(0.8){
+	ease(0.8) {
 }
 
 void CameraManager::update(Vec2 player) {
 	//ˆÊ’u
 	t_pos = Window::Center() - player;
 	//“K“–‚ÉyÀ•WŒÅ’è
-	t_pos.y = Window::Center().y - 340.0/100.0;
+	t_pos.y = Window::Center().y - 340.0 / 100.0;
 	//Šg‘åk¬
 	if (GameSystem::get().input.zoomIn.clicked && t_scale < 1.3) {
 		t_scale += 0.2;

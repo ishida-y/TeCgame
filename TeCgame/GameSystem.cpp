@@ -14,7 +14,7 @@ void GameSystem::update() {
 
 
 KeyInput::KeyInput() :
-	enter(XInput(0).buttonA, Gamepad(0).button(2), Input::KeySpace),
+	enter(XInput(0).buttonA, Gamepad(0).button(3), Input::KeySpace),
 	back(XInput(0).buttonB, Gamepad(0).button(1), Input::KeyX),
 	janp(XInput(0).buttonA, Gamepad(0).button(2), Input::KeyZ),
 	zoomIn(XInput(0).buttonUp, Gamepad(0).povForward, Input::KeyBackslash),

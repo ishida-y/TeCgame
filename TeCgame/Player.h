@@ -4,16 +4,18 @@
 
 #include"Enemy.h"
 
-//pos‚ğ“K“–‚É’Ç‰Á‚µ‚½i’¼‚µ‚Æ‚¢‚Äj
+
 class Player {
 public:
 	PhysicsBody body;
 	RectF range;
+	RectF foot_range;
 	int hp;
 	int dir;
 	Vec2 pos;
 
 	const static Vec2 PLAYER_SIZE;
+	const static Vec2 FOOT_SIZE;
 
 
 
