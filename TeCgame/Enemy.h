@@ -1,8 +1,9 @@
 #pragma once
-#pragma once
 #include<Siv3D.hpp>
 #include<HamFramework.hpp>
 #include<vector>
+
+#include"Map.h"
 
 class Player;
 
@@ -24,7 +25,7 @@ public:
 
 
 	Enemy();
-	void update(const Player& player);
+	void update(const Player& player, const std::vector<std::shared_ptr<Object>>& obj);
 	virtual void move(const Player& player) = 0;
 	void check_dir();
 	virtual void attack(const Player& player) = 0;
@@ -49,7 +50,7 @@ public:
 
 	PhysicsWorld world;
 
-	void update(const Player& player);
+	void update(const Player& player, const std::vector<std::shared_ptr<Object>>& obj);
 	void dead();
 	void draw() const;
 };

@@ -16,7 +16,7 @@ Enemy::Enemy() :
 
 }
 
-void Enemy::update(const Player& player) {
+void Enemy::update(const Player& player, const std::vector<std::shared_ptr<Object>>& obj) {
 	//check_dir();
 	move(player);
 	attack(player);
@@ -49,10 +49,10 @@ EnemyManager::EnemyManager() {
 
 }
 
-void EnemyManager::update(const Player& player) {
+void EnemyManager::update(const Player& player, const std::vector<std::shared_ptr<Object>>& obj) {
 	world.update();
 	for (int i = 0; i < enemies.size(); i++) {
-		enemies[i]->update(player);
+		enemies[i]->update(player, obj);
 	}
 	dead();
 }

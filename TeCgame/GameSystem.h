@@ -36,7 +36,7 @@ class KeyInput {
 public:
 	Button enter;
 	Button back;
-	Button janp;
+	Button jump;
 	Button zoomIn;
 	Button zoomOut;
 	double triggerR;

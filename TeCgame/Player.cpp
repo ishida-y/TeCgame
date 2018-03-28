@@ -4,6 +4,7 @@
 
 const Vec2 Player::PLAYER_SIZE = Vec2(64.0 / 100.0, 128.0 / 100.0);
 const Vec2 Player::FOOT_SIZE = Vec2(32.0 / 100.0, 32.0 / 100.0);
+const int Player::JUMP_LIMIT = 5;
 
 Player::Player(PhysicsWorld& world) :
 	body(world.createRect(Vec2(0, 0), RectF(PLAYER_SIZE), PhysicsMaterial(1.0, 0.0, 0.0), none, PhysicsBodyType::Dynamic)),
@@ -11,22 +12,39 @@ Player::Player(PhysicsWorld& world) :
 	hp(100),
 	dir(1),
 	pos(range._get_center()),
-	foot_range(RectF(Vec2(pos.x, range.y + range.h), FOOT_SIZE)) {
+	foot_range(RectF(Vec2(pos.x, range.y + range.h), FOOT_SIZE)),
+	jumpFlag(false),
+	jumpCount(0) {
 
 	body.setGravityScale(2.0);
 	body.setFixedRotation(true);
 
 }
 
-void Player::update(const EnemyManager& enemymanager) {
-	static double yspeed_prev = 0; //前フレームのy速度
-
+void Player::update(const EnemyManager& enemymanager, const std::vector<std::shared_ptr<Object>>& obj) {
+	
 	body.setVelocity(Vec2(4.0 * GameSystem::get().input.stick.L.x, body.getVelocity().y));
-	if (body.getVelocity().y == 0 && yspeed_prev >= 0 && GameSystem::get().input.janp.clicked) {
-		body.applyForce(Vec2(0.0, -600.0));
-	}
 
-	yspeed_prev = body.getVelocity().y; //本フレームのy速度を保存
+	for (auto elem : obj) {
+		if (foot_range.intersects(elem->range)) {
+			if (GameSystem::get().input.jump.clicked) {
+				body.applyForce(Vec2(0.0, -250.0));
+				jumpFlag = true;
+			}
+		}
+	}
+	if (jumpFlag) {
+		if ((jumpCount < JUMP_LIMIT) && GameSystem::get().input.jump.pressed) {
+			if ((jumpCount > 0) && (jumpCount % 2 == 0)) {
+				body.applyForce(Vec2(0.0, -150.0));
+			}
+			jumpCount++;
+		}
+		else {
+			jumpFlag = false;
+			jumpCount = 0;
+		}
+	}
 
 	if (body.getVelocity().x > 0 && dir == -1) {
 		dir = 1;

@@ -20,7 +20,6 @@ public:
 	PhysicsWorld Pworld;
 	//PhysicsWorld Eworld;
 	std::vector<std::shared_ptr<Object>> obj;
-	PhysicsBody ground_kari; //‰¼‚Ì’n–Ê
 
 	Map();
 	void update();

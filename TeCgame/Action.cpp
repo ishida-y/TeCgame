@@ -28,8 +28,8 @@ void Action::update() {
 
 	map.update();
 
-	player.update(enemymanager);
-	enemymanager.update(player);
+	player.update(enemymanager, map.obj);
+	enemymanager.update(player, map.obj);
 
 	camera.update(player.pos);
 }
