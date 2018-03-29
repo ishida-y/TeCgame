@@ -22,6 +22,6 @@ public:
 	std::vector<std::shared_ptr<Object>> obj;
 
 	Map();
-	void update();
+	void update(double& time_speed);
 	void draw(Vec2 camera) const;
 };

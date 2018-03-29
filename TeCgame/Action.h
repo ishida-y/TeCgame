@@ -16,6 +16,8 @@ public:
 	EnemyManager enemymanager;
 	CameraManager camera;
 
+	double time_speed;
+
 	Action();
 	void init() override;
 	//void updateFadeIn() override;

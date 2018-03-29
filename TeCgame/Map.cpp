@@ -26,8 +26,8 @@ Map::Map() {
 	TextureAsset::Register(L"Mview", L"Data/MiddleView.png");
 }
 
-void Map::update() {
-	Pworld.update(1.0 / 60.0);
+void Map::update(double& time_speed) {
+	Pworld.update(1.0 / 60.0 * time_speed);
 }
 
 void Map::draw(Vec2 camera) const {

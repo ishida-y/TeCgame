@@ -17,6 +17,7 @@ public:
 	bool jumpFlag;
 	int jumpCount;
 
+
 	//std::vector<std::shared_ptr<Attack>> attacks;
 
 	const static int JUMP_LIMIT;
@@ -27,6 +28,7 @@ public:
 
 	Player(PhysicsWorld& world);
 
-	void update(const EnemyManager& enemymanager, const std::vector<std::shared_ptr<Object>>& obj);
+	void update(const EnemyManager& enemymanager, const std::vector<std::shared_ptr<Object>>& obj, double& time_speed);
+	void time_control(double& time_speed);
 	void draw() const;
 };

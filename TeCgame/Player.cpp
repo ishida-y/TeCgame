@@ -7,7 +7,7 @@ const Vec2 Player::FOOT_SIZE = Vec2(32.0 / 100.0, 32.0 / 100.0);
 const int Player::JUMP_LIMIT = 5;
 
 Player::Player(PhysicsWorld& world) :
-	body(world.createRect(Vec2(0, 0), RectF(PLAYER_SIZE), PhysicsMaterial(1.0, 0.0, 0.0), none, PhysicsBodyType::Dynamic)),
+	body(world.createRect(Vec2(0, 0), RectF(PLAYER_SIZE), PhysicsMaterial(1.0, 0.0, 0.02), none, PhysicsBodyType::Dynamic)),
 	range(RectF(body.getPos(), PLAYER_SIZE)),
 	hp(100),
 	dir(1),
@@ -21,14 +21,16 @@ Player::Player(PhysicsWorld& world) :
 
 }
 
-void Player::update(const EnemyManager& enemymanager, const std::vector<std::shared_ptr<Object>>& obj) {
+void Player::update(const EnemyManager& enemymanager, const std::vector<std::shared_ptr<Object>>& obj, double& time_speed) {
 	
+	time_control(time_speed);
+
 	body.setVelocity(Vec2(4.0 * GameSystem::get().input.stick.L.x, body.getVelocity().y));
 
 	for (auto elem : obj) {
 		if (foot_range.intersects(elem->range)) {
 			if (GameSystem::get().input.jump.clicked) {
-				body.applyForce(Vec2(0.0, -250.0));
+				body.applyForce(Vec2(0.0, -250.0) / time_speed);
 				jumpFlag = true;
 			}
 		}
@@ -36,7 +38,7 @@ void Player::update(const EnemyManager& enemymanager, const std::vector<std::sha
 	if (jumpFlag) {
 		if ((jumpCount < JUMP_LIMIT) && GameSystem::get().input.jump.pressed) {
 			if ((jumpCount > 0) && (jumpCount % 2 == 0)) {
-				body.applyForce(Vec2(0.0, -150.0));
+				body.applyForce(Vec2(0.0, -150.0) / time_speed);
 			}
 			jumpCount++;
 		}
@@ -59,6 +61,10 @@ void Player::update(const EnemyManager& enemymanager, const std::vector<std::sha
 
 	foot_range.setCenter(pos.x, range.y + range.h + foot_range.h / 2.0);
 
+}
+
+void Player::time_control(double& time_speed) {
+	time_speed = 1.0 - GameSystem::get().input.triggerL * 0.8;
 }
 
 void Player::draw() const {

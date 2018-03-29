@@ -8,7 +8,8 @@ Action::Action() :
 	map(),
 	player(map.Pworld),
 	enemymanager(),
-	camera(player.pos) {
+	camera(player.pos),
+	time_speed(1.0){
 
 }
 
@@ -25,10 +26,10 @@ void Action::update() {
 		changeScene(L"Title");
 		return;
 	}
+	Println(time_speed);
+	map.update(time_speed);
 
-	map.update();
-
-	player.update(enemymanager, map.obj);
+	player.update(enemymanager, map.obj, time_speed);
 	enemymanager.update(player, map.obj);
 
 	camera.update(player.pos);
