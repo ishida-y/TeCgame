@@ -28,4 +28,6 @@ class Animation {
 	virtual void update() = 0;
 	virtual void draw() = 0;
 	virtual ~Animation();
+
+	int push_test;
 };
