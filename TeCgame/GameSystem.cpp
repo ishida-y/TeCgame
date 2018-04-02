@@ -12,7 +12,6 @@ void GameSystem::update() {
 }
 
 
-
 KeyInput::KeyInput() :
 	enter(XInput(0).buttonA, Gamepad(0).button(3), Input::KeySpace),
 	back(XInput(0).buttonB, Gamepad(0).button(1), Input::KeyX),
@@ -94,6 +93,18 @@ void Button::update() {
 
 }
 
+bool Button::get_clicked() {
+	return clicked;
+}
+bool Button::get_pressed() {
+	return pressed;
+}
+int32  Button::get_pressedDuration() {
+	return pressedDuration;
+}
+bool Button::get_released() {
+	return released;
+}
 
 
 

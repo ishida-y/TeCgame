@@ -4,6 +4,15 @@
 
 class Button {
 public:
+	Button(s3d::Key _Xcon, s3d::Key _pad, s3d::Key _key);
+	void update();
+
+	bool get_clicked();
+	bool get_pressed();
+	int32  get_pressedDuration();
+	bool get_released();
+
+private:
 	bool clicked;
 	bool pressed;
 	int32  pressedDuration;
@@ -11,10 +20,6 @@ public:
 	s3d::Key Xcon;
 	s3d::Key pad;
 	s3d::Key key;
-
-	Button(s3d::Key _Xcon, s3d::Key _pad, s3d::Key _key);
-	void update();
-private:
 
 };
 

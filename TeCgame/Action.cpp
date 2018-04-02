@@ -22,7 +22,7 @@ void Action::init() {
 //}
 
 void Action::update() {
-	if (GameSystem::get().input.enter.clicked == true) {
+	if (GameSystem::get().input.enter.get_clicked() == true) {
 		changeScene(L"Title");
 		return;
 	}

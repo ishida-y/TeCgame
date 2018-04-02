@@ -16,10 +16,10 @@ void CameraManager::update(Vec2 player) {
 	//t_pos.y = Window::Center().y - 340.0 / 100.0;
 	t_pos.y += 100.0 / 100.0;
 	//Šg‘åk¬
-	if (GameSystem::get().input.zoomIn.clicked && t_scale < 1.3) {
+	if (GameSystem::get().input.zoomIn.get_clicked() && t_scale < 1.3) {
 		t_scale += 0.2;
 	}
-	if (GameSystem::get().input.zoomOut.clicked && t_scale > 0.7) {
+	if (GameSystem::get().input.zoomOut.get_clicked() && t_scale > 0.7) {
 		t_scale -= 0.2;
 	}
 	//ƒC[ƒYˆ—

@@ -29,14 +29,14 @@ void Player::update(const EnemyManager& enemymanager, const std::vector<std::sha
 
 	for (auto elem : obj) {
 		if (foot_range.intersects(elem->range)) {
-			if (GameSystem::get().input.jump.clicked) {
+			if (GameSystem::get().input.jump.get_clicked()) {
 				body.applyForce(Vec2(0.0, -250.0) / time_speed);
 				jumpFlag = true;
 			}
 		}
 	}
 	if (jumpFlag) {
-		if ((jumpCount < JUMP_LIMIT) && GameSystem::get().input.jump.pressed) {
+		if ((jumpCount < JUMP_LIMIT) && GameSystem::get().input.jump.get_pressed()) {
 			if ((jumpCount > 0) && (jumpCount % 2 == 0)) {
 				body.applyForce(Vec2(0.0, -150.0) / time_speed);
 			}
