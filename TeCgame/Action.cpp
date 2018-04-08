@@ -38,7 +38,7 @@ void Action::update() {
 void Action::draw() const {
 
 	//ç¿ïWïœä∑
-	const Transformer2D transformer(Mat3x2::Translate(camera.pos).scale(100.0 * camera.scale, { 640, 360 }), true);
+	const Transformer2D transformer(Mat3x2::Translate(-camera.pos + Window::Center()).scale(100.0 * camera.scale, { 640, 360 }), true);
 
 	Println(L"Action (click space)");
 	map.draw(camera.pos);

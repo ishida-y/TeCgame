@@ -32,22 +32,20 @@ void Map::update(double& time_speed) {
 
 void Map::draw(Vec2 camera) const {
 	//”wŒi‚Ì•`‰æ
-	Vec2 temp(Window::Center() - camera);
-	Println(temp);
 	double tmp = 80;//0.4
 	double tmp2 = 80;
-	TextureAsset(L"Dview").scale(0.01).draw(Vec2(temp.x * tmp2, temp.y * tmp - 200) / 100.0);
-	TextureAsset(L"Dview").scale(0.01).draw(Vec2(temp.x * tmp2 + 1280, temp.y * tmp - 200) / 100.0);
-	TextureAsset(L"Dview").scale(0.01).draw(Vec2(temp.x * tmp2 - 1280, temp.y * tmp - 200) / 100.0);
-	TextureAsset(L"Dview").scale(0.01).draw(Vec2(temp.x * tmp2 + 2560, temp.y * tmp - 200) / 100.0);
-	TextureAsset(L"Dview").scale(0.01).draw(Vec2(temp.x * tmp2 - 2560, temp.y * tmp - 200) / 100.0);
+	TextureAsset(L"Dview").scale(0.01).draw(Vec2(camera.x * tmp2, camera.y * tmp - 200) / 100.0);
+	TextureAsset(L"Dview").scale(0.01).draw(Vec2(camera.x * tmp2 + 1280, camera.y * tmp - 200) / 100.0);
+	TextureAsset(L"Dview").scale(0.01).draw(Vec2(camera.x * tmp2 - 1280, camera.y * tmp - 200) / 100.0);
+	TextureAsset(L"Dview").scale(0.01).draw(Vec2(camera.x * tmp2 + 2560, camera.y * tmp - 200) / 100.0);
+	TextureAsset(L"Dview").scale(0.01).draw(Vec2(camera.x * tmp2 - 2560, camera.y * tmp - 200) / 100.0);
 	double tmp_y = 40;//0.2
 	double tmp_x = 40;
-	TextureAsset(L"Mview").scale(0.01).draw(Vec2(temp.x * tmp_x, temp.y*tmp_y - 200) / 100.0);
-	TextureAsset(L"Mview").scale(0.01).draw(Vec2(temp.x * tmp_x + 2560, temp.y*tmp_y - 200) / 100.0);
-	TextureAsset(L"Mview").scale(0.01).draw(Vec2(temp.x * tmp_x - 2560, temp.y*tmp_y - 200) / 100.0);
-	TextureAsset(L"Mview").scale(0.01).draw(Vec2(temp.x * tmp_x + 5120, temp.y*tmp_y - 200) / 100.0);
-	TextureAsset(L"Mview").scale(0.01).draw(Vec2(temp.x * tmp_x - 5120, temp.y*tmp_y - 200) / 100.0);
+	TextureAsset(L"Mview").scale(0.01).draw(Vec2(camera.x * tmp_x, camera.y*tmp_y - 200) / 100.0);
+	TextureAsset(L"Mview").scale(0.01).draw(Vec2(camera.x * tmp_x + 2560, camera.y*tmp_y - 200) / 100.0);
+	TextureAsset(L"Mview").scale(0.01).draw(Vec2(camera.x * tmp_x - 2560, camera.y*tmp_y - 200) / 100.0);
+	TextureAsset(L"Mview").scale(0.01).draw(Vec2(camera.x * tmp_x + 5120, camera.y*tmp_y - 200) / 100.0);
+	TextureAsset(L"Mview").scale(0.01).draw(Vec2(camera.x * tmp_x - 5120, camera.y*tmp_y - 200) / 100.0);
 
 	//obj‚Ì•`‰æ
 	for (const auto& i : obj) {
