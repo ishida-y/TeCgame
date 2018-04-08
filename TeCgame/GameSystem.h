@@ -42,6 +42,7 @@ public:
 	Button enter;
 	Button back;
 	Button jump;
+	Button slash;
 	Button zoomIn;
 	Button zoomOut;
 	double triggerR;

@@ -8,8 +8,7 @@
 #include"Map.h"
 
 
-class Action : public SceneManager<String>::Scene
-{
+class Action : public SceneManager<String>::Scene {
 public:
 	Map map;
 	Player player;
