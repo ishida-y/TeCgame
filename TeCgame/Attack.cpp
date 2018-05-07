@@ -1,13 +1,16 @@
-#include<Siv3D.hpp>
-#include<HamFramework.hpp>
-
 #include"Attack.h"
 
-const int Slash::VANISH_LIMIT = 30;
-
-const Vec2 Slash::SIZE = Vec2(32.0, 32.0) / 100;
-
-const int Slash::POWER = 10;
+//const int Slash1::VANISH_LIMIT = 30;
+//const int Slash2::VANISH_LIMIT = 30;
+//const int Slash3::VANISH_LIMIT = 30;
+//
+//const Vec2 Slash1::SIZE = Vec2(32.0, 64.0) / 100;
+//const Vec2 Slash2::SIZE = Vec2(48.0, 48.0) / 100;
+//const Vec2 Slash3::SIZE = Vec2(64.0, 64.0) / 100;
+//
+//const int Slash1::POWER = 10;
+//const int Slash2::POWER = 10;
+//const int Slash3::POWER = 10;
 
 Attack::Attack(Vec2 _pos, RectF _range) :
 	count(0),
@@ -17,8 +20,32 @@ Attack::Attack(Vec2 _pos, RectF _range) :
 
 }
 
-Slash::Slash(Vec2 _pos) :
-	Attack(_pos, RectF(_pos - (SIZE / 2.0), SIZE)) {
+Slash::Slash(Vec2 _pos, int _VANISH_LIMIT, Vec2 _SIZE, int _POWER) :
+	VANISH_LIMIT(_VANISH_LIMIT),
+	//SIZE(_SIZE),
+	POWER(_POWER),
+	Attack(_pos, RectF(_pos - (_SIZE / 2.0), _SIZE)) {
+
+}
+Slash1::Slash1(Vec2 _pos) :
+	Slash(_pos,
+		30/*VANISH_LIMIT*/,
+		Vec2(32.0, 64.0) / 100/*SIZE*/,
+		10/*POWER*/) {
+
+}
+Slash2::Slash2(Vec2 _pos) :
+	Slash(_pos,
+		30/*VANISH_LIMIT*/,
+		Vec2(48.0, 48.0) / 100/*SIZE*/,
+		10/*POWER*/) {
+
+}
+Slash3::Slash3(Vec2 _pos) :
+	Slash(_pos,
+		30/*VANISH_LIMIT*/,
+		Vec2(64.0, 64.0) / 100/*SIZE*/,
+		10/*POWER*/) {
 
 }
 
@@ -27,14 +54,14 @@ void Slash::update() {
 	if (count > VANISH_LIMIT) {
 		isDead = true;
 	}
-
-
 }
 
-void Slash::draw() {
+void Slash1::draw() {
 	range.draw(Palette::Red);
 }
-
-Animation::Animation() {
-
+void Slash2::draw() {
+	range.draw(Palette::Orange);
+}
+void Slash3::draw() {
+	range.draw(Palette::Yellow);
 }

@@ -1,6 +1,3 @@
-#include<Siv3D.hpp>
-#include<HamFramework.hpp>
-
 #include"Select.h"
 #include"GameSystem.h"
 

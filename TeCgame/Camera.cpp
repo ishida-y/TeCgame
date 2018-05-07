@@ -26,7 +26,4 @@ void CameraManager::update(Vec2 player) {
 	pos = ease * pos + (1 - ease) * t_pos;
 	scale = ease * scale + (1 - ease) * t_scale;
 
-
-	Print(L"CameraPos:");
-	Println(pos);
 }

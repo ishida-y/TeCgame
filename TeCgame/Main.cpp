@@ -1,8 +1,4 @@
-﻿
-#include<Siv3D.hpp>
-#include<HamFramework.hpp>
-
-#include"Title.h"
+﻿#include"Title.h"
 #include"Action.h"
 #include"Select.h"
 #include"GameSystem.h"

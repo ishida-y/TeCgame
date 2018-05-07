@@ -8,6 +8,7 @@ public:
 	RectF range;
 	Vec2 pos;
 	int count;
+	//int dir;
 	bool isDead;
 
 	Attack(Vec2 _pos, RectF _range);
@@ -20,13 +21,42 @@ private:
 
 class Slash : public Attack {
 public:
-	Slash(Vec2 _pos);
-	static const int VANISH_LIMIT;
-	static const Vec2 SIZE;
-	static const int POWER;
+	Slash(Vec2 _pos, int _VANISH_LIMIT, Vec2 _SIZE, int _POWER);
+	const int VANISH_LIMIT;
+	//const Vec2 SIZE;
+	const int POWER;
 
 	void update() override;
-	void draw() override;//とりあえずデバッグ用
+	virtual ~Slash() = default;
+
+	virtual void draw() = 0;
+};
+class Slash1 : public Slash {
+public:
+	//static const int VANISH_LIMIT;
+	//static const Vec2 SIZE;
+	//static const int POWER;
+	Slash1(Vec2 _pos);
+
+	void draw();
+};
+class Slash2 : public Slash {
+public:
+	//static const int VANISH_LIMIT;
+	//static const Vec2 SIZE;
+	//static const int POWER;
+	Slash2(Vec2 _pos);
+
+	void draw();
+};
+class Slash3 : public Slash {
+public:
+	//static const int VANISH_LIMIT;
+	//static const Vec2 SIZE;
+	//static const int POWER;
+	Slash3(Vec2 _pos);
+
+	void draw();
 };
 
 class Animation {
