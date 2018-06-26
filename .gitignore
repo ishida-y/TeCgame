@@ -12,3 +12,8 @@ TeCgame/Debug/TeCgame.tlog/TeCgame.write.1u.tlog
 TeCgame/Debug/TeCgame.tlog/CL.write.1.tlog
 TeCgame/Debug/TeCgame.pdb
 TeCgame/Debug/TeCgame.log
+*.tlog
+*.obj
+*.lib
+*.exp
+*.lastbuildstate
