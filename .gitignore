@@ -17,3 +17,9 @@ TeCgame/Debug/TeCgame.log
 *.lib
 *.exp
 *.lastbuildstate
+*.res
+*.exe
+*.ilk
+*.log
+*.pdb
+*.idb
