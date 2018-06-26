@@ -1,2 +1,6 @@
 #TargetFrameworkVersion=v4.0:PlatformToolSet=v140:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=8.1
+<<<<<<< HEAD
 Debug|Win32|C:\Users\IY\Documents\TeCgame\TeCgame\|
+=======
+Debug|Win32|C:\Users\t_kot\OneDrive\テクノコンタクト\TeCgame\TeCgame\|
+>>>>>>> a4fd85f0007fd993b40d7e26954e0698f57afa64

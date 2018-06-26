@@ -1,6 +1,3 @@
-#include<Siv3D.hpp>
-#include<HamFramework.hpp>
-
 #include"Action.h"
 #include"GameSystem.h"
 
@@ -22,11 +19,6 @@ void Action::init() {
 //}
 
 void Action::update() {
-	//if (GameSystem::get().input.enter.get_clicked() == true) {
-	//	changeScene(L"Title");
-	//	return;
-	//}
-	Println(time_speed);
 	map.update(time_speed);
 
 	player.update(enemymanager, map.obj, time_speed);
@@ -40,7 +32,13 @@ void Action::draw() const {
 	//ç¿ïWïœä∑
 	const Transformer2D transformer(Mat3x2::Translate(-camera.pos + Window::Center()).scale(100.0 * camera.scale, { 640, 360 }), true);
 
-	Println(L"Action (click space)");
+	if (GameSystem::get().debug) {
+		Println(L"Action");
+		Println(time_speed);
+		Print(L"CameraPos:");
+		Println(camera.pos);
+
+	}
 	map.draw(camera.pos);
 	player.draw();
 	enemymanager.draw();

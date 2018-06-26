@@ -1,4 +1,5 @@
 ﻿cl : コマンド ライン warning D9030: '/Gm' はマルチプロセシングと互換性がありません。/MP スイッチを無視します
+<<<<<<< HEAD
   Title.cpp
 c:\users\iy\documents\tecgame\tecgame\gamesystem.h(82): warning C4100: 'r': 引数は関数の本体部で 1 度も参照されません。
 c:\users\iy\documents\tecgame\tecgame\gamesystem.h(83): warning C4100: 'r': 引数は関数の本体部で 1 度も参照されません。
@@ -32,3 +33,25 @@ c:\users\iy\documents\tecgame\tecgame\gamesystem.h(83): warning C4100: 'r': 引�
      ライブラリ C:\Users\IY\Documents\TeCgame\TeCgame\Debug\TeCgame.lib とオブジェクト C:\Users\IY\Documents\TeCgame\TeCgame\Debug\TeCgame.exp を作成中
   TeCgame.vcxproj -> C:\Users\IY\Documents\TeCgame\TeCgame\Debug\TeCgame.exe
   TeCgame.vcxproj -> C:\Users\IY\Documents\TeCgame\TeCgame\Debug\TeCgame.pdb (Full PDB)
+=======
+  Main.cpp
+c:\users\t_kot\onedrive\テクノコンタクト\tecgame\tecgame\gamesystem.h(82): warning C4100: 'r': 引数は関数の本体部で 1 度も参照されません。
+c:\users\t_kot\onedrive\テクノコンタクト\tecgame\tecgame\gamesystem.h(83): warning C4100: 'r': 引数は関数の本体部で 1 度も参照されません。
+  Enemy.cpp
+c:\users\t_kot\onedrive\テクノコンタクト\tecgame\tecgame\enemy.cpp(19): warning C4100: 'obj': 引数は関数の本体部で 1 度も参照されません。
+c:\users\t_kot\onedrive\テクノコンタクト\tecgame\tecgame\enemy.cpp(54): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+c:\users\t_kot\onedrive\テクノコンタクト\tecgame\tecgame\enemy.cpp(68): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+  Attack.cpp
+  Action.cpp
+c:\users\t_kot\onedrive\テクノコンタクト\tecgame\tecgame\gamesystem.h(82): warning C4100: 'r': 引数は関数の本体部で 1 度も参照されません。
+c:\users\t_kot\onedrive\テクノコンタクト\tecgame\tecgame\gamesystem.h(83): warning C4100: 'r': 引数は関数の本体部で 1 度も参照されません。
+  コードを生成中...
+  コンパイル中...
+  Player.cpp
+c:\users\t_kot\onedrive\テクノコンタクト\tecgame\tecgame\gamesystem.h(82): warning C4100: 'r': 引数は関数の本体部で 1 度も参照されません。
+c:\users\t_kot\onedrive\テクノコンタクト\tecgame\tecgame\gamesystem.h(83): warning C4100: 'r': 引数は関数の本体部で 1 度も参照されません。
+c:\users\t_kot\onedrive\テクノコンタクト\tecgame\tecgame\player.cpp(35): warning C4100: 'enemymanager': 引数は関数の本体部で 1 度も参照されません。
+  コードを生成中...
+  TeCgame.vcxproj -> C:\Users\t_kot\OneDrive\テクノコンタクト\TeCgame\TeCgame\Debug\TeCgame.exe
+  TeCgame.vcxproj -> C:\Users\t_kot\OneDrive\テクノコンタクト\TeCgame\TeCgame\Debug\TeCgame.pdb (Full PDB)
+>>>>>>> a4fd85f0007fd993b40d7e26954e0698f57afa64
