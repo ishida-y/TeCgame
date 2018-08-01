@@ -29,21 +29,21 @@ Slash::Slash(Vec2 _pos, int _VANISH_LIMIT, Vec2 _SIZE, int _POWER) :
 }
 Slash1::Slash1(Vec2 _pos) :
 	Slash(_pos,
-		30/*VANISH_LIMIT*/,
+		5/*VANISH_LIMIT*/,
 		Vec2(32.0, 64.0) / 100/*SIZE*/,
 		10/*POWER*/) {
 
 }
 Slash2::Slash2(Vec2 _pos) :
 	Slash(_pos,
-		30/*VANISH_LIMIT*/,
+		5/*VANISH_LIMIT*/,
 		Vec2(48.0, 48.0) / 100/*SIZE*/,
 		10/*POWER*/) {
 
 }
 Slash3::Slash3(Vec2 _pos) :
 	Slash(_pos,
-		30/*VANISH_LIMIT*/,
+		8/*VANISH_LIMIT*/,
 		Vec2(64.0, 64.0) / 100/*SIZE*/,
 		10/*POWER*/) {
 

@@ -19,7 +19,7 @@ Enemy::Enemy() :
 void Enemy::update(const Player& player, const std::vector<std::shared_ptr<Object>>& obj) {
 	//check_dir();
 	move(player);
-	attack(player);
+	slash(player);
 	check_hit(player);
 	check_dead();
 }

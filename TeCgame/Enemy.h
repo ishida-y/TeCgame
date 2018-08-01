@@ -28,7 +28,7 @@ public:
 	void update(const Player& player, const std::vector<std::shared_ptr<Object>>& obj);
 	virtual void move(const Player& player) = 0;
 	void check_dir();
-	virtual void attack(const Player& player) = 0;
+	virtual void slash(const Player& player) = 0;
 	virtual void check_hit(const Player& player) = 0;
 	void check_dead();
 	virtual void draw() const = 0;

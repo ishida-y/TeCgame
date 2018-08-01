@@ -3,7 +3,8 @@
 #include"GameSystem.h"
 
 const Vec2 Player::PLAYER_SIZE = Vec2(64.0 / 100.0, 128.0 / 100.0);
-const Vec2 Player::FOOT_SIZE = Vec2(64.0 / 100.0, 8.0 / 100.0);
+const Vec2 Player::FOOT_SIZE_MAIN = Vec2(Player::PLAYER_SIZE.x, 8.0 / 100.0);
+const Vec2 Player::FOOT_SIZE_SIDE = /*Player::FOOT_SIZE_MAIN + */Vec2(8.0 / 100.0, 0);
 const int Player::JUMP_LIMIT = 5;
 const int Player::SLASH_LIMIT = 30;
 const int Player::SLASH_COOLTIME = 15;
@@ -11,11 +12,10 @@ const int Player::SLASH_COOLTIME = 15;
 
 Player::Player(PhysicsWorld& world) :
 	body(world.createRect(Vec2(0, 0), RectF(PLAYER_SIZE), PhysicsMaterial(1.0, 0.0, 0.02), none, PhysicsBodyType::Dynamic)),
-	range(RectF(body.getPos(), PLAYER_SIZE)),
+	range(body),
 	hp(100),
 	dir(1),
-	pos(range._get_center()),
-	foot_range(RectF(Vec2(pos.x, range.y + range.h), FOOT_SIZE)),
+	pos(range.body._get_center()),
 	flag(),
 	jumpCount(0),
 	slashCount(0) {
@@ -25,9 +25,16 @@ Player::Player(PhysicsWorld& world) :
 
 }
 
+Player::Range::Range(PhysicsBody Pbody) :
+	body(RectF(Pbody.getPos(), PLAYER_SIZE)),
+	foot_main(RectF(Vec2(body._get_center().x, body.y + body.h), FOOT_SIZE_MAIN)),
+	foot_side(foot_main.pos - FOOT_SIZE_SIDE, FOOT_SIZE_MAIN + 2 * FOOT_SIZE_SIDE) {
+
+}
+
 Player::Flag::Flag() :
 	jump(false),
-	attack(false),
+	slash(false),
 	slashStage(0) {
 
 }
@@ -36,26 +43,26 @@ void Player::update(const EnemyManager& enemymanager, const std::vector<std::sha
 	timeControl(time_speed);
 	move(obj, time_speed);
 	checkDir();
-	attack();
+	slash();
 }
 
 void Player::timeControl(double& time_speed) {
 	time_speed = 1.0 - GameSystem::get().input.triggerL * 0.8;
 }
 
-void Player::attack() {
-	if (flag.attack) {
+void Player::slash() {
+	if (flag.slash) {
 		slashCount++;
 		if (slashCount > SLASH_LIMIT) {
 			slashCount = 0;
-			flag.attack = false;
+			flag.slash = false;
 			flag.slashStage = 0;
 		}
 	}
 	else {
 		if (GameSystem::get().input.slash.get_clicked()) {
 			addSlash();
-			flag.attack = true;
+			flag.slash = true;
 		}
 	}
 	if (GameSystem::get().input.slash.get_clicked() && slashCount > SLASH_COOLTIME) {
@@ -87,11 +94,6 @@ void Player::addSlash() {
 		slashCount = 0;
 		flag.slashStage++;
 		break;
-	//case 3:
-	//	attacks.emplace_back(std::make_shared<Slash3>(pos + Vec2(dir*32.0 / 100.0, 0)));
-	//	slashCount = 0;
-	//	flag.slashStage++;
-	//	break;
 	}
 }
 
@@ -102,17 +104,18 @@ void Player::move(const std::vector<std::shared_ptr<Object>>& obj, const double&
 	jump(obj, time_speed);
 
 	//rangeÇ∆Ç©bodyÇÃpos(getPos)ÇÕí∑ï˚å`ÇÃç∂è„
-	range.pos = body.getPos();
+	range.body.pos = body.getPos();
 	//Ç±Ç¢Ç¬ÇæÇØíÜêSç¿ïW
-	pos = range._get_center();
+	pos = range.body._get_center();
 
-	foot_range.setCenter(pos.x, range.y + range.h + foot_range.h / 2.0);
+	range.foot_main.setCenter(pos.x, range.body.y + range.body.h + range.foot_main.h / 2.0);
+	range.foot_side.setCenter(pos.x, range.body.y + range.body.h + range.foot_main.h / 2.0);
 }
 
 void Player::jump(const std::vector<std::shared_ptr<Object>>& obj, const double& time_speed) {
 
 	for (auto elem : obj) {
-		if (foot_range.intersects(elem->range)) {
+		if (range.foot_main.intersects(elem->range)) {
 			if (GameSystem::get().input.jump.get_clicked()) {
 				body.applyForce(Vec2(0.0, -250.0) / time_speed);
 				flag.jump = true;
@@ -120,12 +123,17 @@ void Player::jump(const std::vector<std::shared_ptr<Object>>& obj, const double&
 			}
 			break;
 		}
+		else if (range.foot_side.intersects(elem->range)) {
+			if (GameSystem::get().input.jump.get_clicked()) {
+				body.applyForce(Vec2(-100.0*dir, -200.0) / time_speed);
+				flag.jump = true;
+			}
+		}
 	}
 	if (flag.jump) {
 		if ((jumpCount < JUMP_LIMIT) && GameSystem::get().input.jump.get_pressed()) {
 			if ((jumpCount > 0) && (jumpCount % 2 == 0)) {
 				body.applyForce(Vec2(0.0, -150.0) / time_speed);
-				//body.setVelocity(Vec2(body.getVelocity().x, -5.0) / time_speed);
 			}
 			jumpCount++;
 		}
@@ -149,15 +157,18 @@ void Player::checkDir() {
 void Player::draw() const {
 
 	if (GameSystem::get().debug) {
-		range.draw();
+		range.body.draw();
 		Circle(pos, 0.05).draw(Palette::Red);
-		foot_range.draw(Palette::Orange);
+		range.foot_side.draw(Palette::Yellow);
+		range.foot_main.draw(Palette::Orange);
+		Print(L"player.pos:");
+		Println(pos);
 		Print(L"slashCount:");
 		Println(slashCount);
 		Print(L"flag.slashStage:");
 		Println(flag.slashStage);
-		Print(L"flag.attack:");
-		Println(flag.attack);
+		Print(L"flag.slash:");
+		Println(flag.slash);
 
 		for (auto elem : attacks) {
 			elem->draw();

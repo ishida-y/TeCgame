@@ -1,6 +1,5 @@
 #include "GameSystem.h"
 
-
 const bool GameSystem::debug = true;
 
 GameSystem::GameSystem() {
@@ -9,8 +8,12 @@ GameSystem::GameSystem() {
 
 void GameSystem::update() {
 	input.update();
-}
 
+	if (debug) {
+		Print(L"triggerL:");
+		Println(input.triggerL);
+	}
+}
 
 KeyInput::KeyInput() :
 	enter(XInput(0).buttonA, Gamepad(0).button(2), Input::KeySpace),
@@ -162,11 +165,6 @@ void Stick::update(s3d::Key Rup, s3d::Key Rdown, s3d::Key Rright, s3d::Key Rleft
 		}
 	}
 }
-
-
-
-
-
 
 SoundManager::SoundManager() {
 	bgm = 100;
