@@ -17,7 +17,7 @@ void Object::draw() const {
 Map::Map() {
 	//“K“–‚Éobj‚ð’Ç‰Á
 	obj.emplace_back(std::make_shared<Object>(Pworld, RectF((Vec2(-100, 600) / 100.0), Vec2(10100, 10) / 100.0)));
-	obj.emplace_back(std::make_shared<Object>(Pworld, RectF((Vec2(-100, 500) / 100.0), Vec2(100, 100) / 100.0)));
+	obj.emplace_back(std::make_shared<Object>(Pworld, RectF((Vec2(-90, -300) / 100.0), Vec2(10, 1000) / 100.0)));
 	obj.emplace_back(std::make_shared<Object>(Pworld, RectF((Vec2(500, 300) / 100.0), Vec2(100, 300) / 100.0)));
 
 	Pworld.setGravity(Vec2(0.0, 9.8));
