@@ -6,7 +6,7 @@ CameraManager::CameraManager(Vec2 player) :
 	t_pos(player),
 	scale(1.0),
 	t_scale(1.0),
-	ease(0.8) {
+	ease(0.9) {
 }
 
 void CameraManager::update(Vec2 player) {
@@ -25,5 +25,18 @@ void CameraManager::update(Vec2 player) {
 	//ÉCÅ[ÉYèàóù
 	pos = ease * pos + (1 - ease) * t_pos;
 	scale = ease * scale + (1 - ease) * t_scale;
-
+	
+	/*
+	if (Input::KeyUp.pressed) {
+		pos.y -= 0.1;
+	}
+	if (Input::KeyDown.pressed) {
+		pos.y += 0.1;
+	}
+	if (Input::KeyLeft.pressed) {
+		pos.x -= 0.1;
+	}
+	if (Input::KeyRight.pressed) {
+		pos.x += 0.1;
+	}*/
 }
