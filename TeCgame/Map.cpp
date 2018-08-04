@@ -1,37 +1,28 @@
 #include "Map.h"
-
-Object::Object(PhysicsWorld& world, RectF _range) :
-	range(_range),
-	pos(_range._get_center()),
-	body(world.createRect(Vec2(0, 0), _range, PhysicsMaterial(1.0, 0.0, 0.0), none, PhysicsBodyType::Static)) {
-
-}
-
-void Object::draw() const {
-	range.draw();
-	Circle(pos, 5.0/100.0).draw(Palette::Red);
-}
+#include "UseOperator.h"
 
 
-
-Map::Map() {
-	//“K“–‚Éobj‚ð’Ç‰Á
-	obj.emplace_back(std::make_shared<Object>(Pworld, RectF((Vec2(-100, 600) / 100.0), Vec2(10100, 10) / 100.0)));
-	obj.emplace_back(std::make_shared<Object>(Pworld, RectF((Vec2(-90, -300) / 100.0), Vec2(10, 1000) / 100.0)));
-	obj.emplace_back(std::make_shared<Object>(Pworld, RectF((Vec2(500, 300) / 100.0), Vec2(100, 300) / 100.0)));
-
+Map::Map() :
+	obj(L"obj1"), 
+	Dview(L"DistantView", Vec2(0.2, 0.2)),
+	Mview(L"MiddleView", Vec2(0.4, 0.3)) {
 	Pworld.setGravity(Vec2(0.0, 9.8));
-
-	TextureAsset::Register(L"Dview", L"Data/DistantView.png");
-	TextureAsset::Register(L"Mview", L"Data/MiddleView.png");
+	UseOperator::get().init(Pworld);
+	//TextureAsset::Register(L"Dview", L"Data/DistantView.png");
+	//TextureAsset::Register(L"Mview", L"Data/MiddleView.png");
+	obj.useUpdate();
 }
 
 void Map::update(double& time_speed) {
 	Pworld.update(1.0 / 60.0 * time_speed);
+	obj.useUpdate();//Žg‚¤obj‚ÌŒvŽZ
 }
 
 void Map::draw(Vec2 camera) const {
 	//”wŒi‚Ì•`‰æ
+	Dview.draw(camera);
+	Mview.draw(camera);
+	/*
 	double tmp = 80;//0.4
 	double tmp2 = 80;
 	TextureAsset(L"Dview").scale(0.01).draw(Vec2(camera.x * tmp2, camera.y * tmp - 200) / 100.0);
@@ -46,9 +37,7 @@ void Map::draw(Vec2 camera) const {
 	TextureAsset(L"Mview").scale(0.01).draw(Vec2(camera.x * tmp_x - 2560, camera.y*tmp_y - 200) / 100.0);
 	TextureAsset(L"Mview").scale(0.01).draw(Vec2(camera.x * tmp_x + 5120, camera.y*tmp_y - 200) / 100.0);
 	TextureAsset(L"Mview").scale(0.01).draw(Vec2(camera.x * tmp_x - 5120, camera.y*tmp_y - 200) / 100.0);
-
+	*/
 	//obj‚Ì•`‰æ
-	for (const auto& i : obj) {
-		i->draw();
-	}
+	UseOperator::get().draw();
 }

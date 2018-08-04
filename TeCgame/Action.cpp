@@ -1,5 +1,6 @@
 #include"Action.h"
 #include"GameSystem.h"
+#include "UseOperator.h"
 
 Action::Action() :
 	map(),
@@ -21,8 +22,8 @@ void Action::init() {
 void Action::update() {
 	map.update(time_speed);
 
-	player.update(enemymanager, map.obj, time_speed);
-	enemymanager.update(player, map.obj);
+	player.update(enemymanager, UseOperator::get().useObjs, time_speed);
+	enemymanager.update(player, UseOperator::get().useObjs);
 
 	camera.update(player.pos);
 }

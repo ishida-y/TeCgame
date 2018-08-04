@@ -17,6 +17,10 @@ void Main()
 	while (System::Update())
 	{
 		ClearPrint();
+		if (GameSystem::get().debug) {
+			Print(L"FPS:");
+			Println(Profiler::FPS());
+		}
 		GameSystem::get().update();
 		manager.updateAndDraw();
 	}

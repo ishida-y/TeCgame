@@ -23,6 +23,8 @@ TeCgame/Debug/TeCgame.log
 *.log
 *.pdb
 *.idb
+*.png
+*.csv
 TeCgame/Debug/TeCgame_log.html
 TeCgame/.vs/slnx.sqlite
 TeCgame/.vs/VSWorkspaceState.json

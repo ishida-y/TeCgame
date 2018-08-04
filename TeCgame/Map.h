@@ -4,23 +4,17 @@
 #include<vector>
 #include <memory>
 #include <algorithm>
-
-class Object {
-public:
-	Vec2 pos;
-	RectF range;
-	PhysicsBody body;
-
-	Object(PhysicsWorld& world, RectF _range);
-	void draw() const;
-};
+#include "ObjectManager.h"
+#include "BackGround.h"
 
 class Map {
 public:
+	ObjectManager obj;
+	BackGround Dview;
+	BackGround Mview;
+
 	PhysicsWorld Pworld;
 	//PhysicsWorld Eworld;
-	std::vector<std::shared_ptr<Object>> obj;
-
 	Map();
 	void update(double& time_speed);
 	void draw(Vec2 camera) const;
