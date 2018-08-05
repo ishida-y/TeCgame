@@ -4,15 +4,17 @@
 
 class Attack {
 public:
+	const int VANISH_LIMIT;
+	const int POWER;
+	const int DIR;
 
 	RectF range;
 	Vec2 pos;
-	int count;
-	//int dir;
+	double count;
 	bool isDead;
 
-	Attack(Vec2 _pos, RectF _range);
-	virtual void update() = 0;
+	Attack(Vec2 _pos, RectF _range, int _DIR, int _VANISH_LIMIT, int _POWER);
+	virtual void update(const double& time_speed) = 0;
 	virtual ~Attack() = default;
 
 	virtual void draw() = 0;//とりあえずデバッグ用
@@ -21,40 +23,28 @@ private:
 
 class Slash : public Attack {
 public:
-	Slash(Vec2 _pos, int _VANISH_LIMIT, Vec2 _SIZE, int _POWER);
-	const int VANISH_LIMIT;
-	//const Vec2 SIZE;
-	const int POWER;
+	Slash(Vec2 _pos, int _DIR, int _VANISH_LIMIT, Vec2 _SIZE, int _POWER);
 
-	void update() override;
+	void update(const double& time_speed) override;
 	virtual ~Slash() = default;
 
 	virtual void draw() = 0;
 };
 class Slash1 : public Slash {
 public:
-	//static const int VANISH_LIMIT;
-	//static const Vec2 SIZE;
-	//static const int POWER;
-	Slash1(Vec2 _pos);
+	Slash1(Vec2 _pos, int _DIR);
 
 	void draw();
 };
 class Slash2 : public Slash {
 public:
-	//static const int VANISH_LIMIT;
-	//static const Vec2 SIZE;
-	//static const int POWER;
-	Slash2(Vec2 _pos);
+	Slash2(Vec2 _pos, int _DIR);
 
 	void draw();
 };
 class Slash3 : public Slash {
 public:
-	//static const int VANISH_LIMIT;
-	//static const Vec2 SIZE;
-	//static const int POWER;
-	Slash3(Vec2 _pos);
+	Slash3(Vec2 _pos, int _DIR);
 
 	void draw();
 };
@@ -72,13 +62,3 @@ public:
 	virtual void draw() = 0;
 	virtual ~Animation() = default;
 };
-
-//class AttackManager {
-//public:
-//	std::vector<std::shared_ptr<Attack>> attacks;
-//
-//	AttackManager();
-//	void update();
-//	void draw();
-//
-//};

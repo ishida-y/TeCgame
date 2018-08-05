@@ -6,11 +6,10 @@
 
 const Vec2 Player::PLAYER_SIZE = Vec2(64.0 / 100.0, 128.0 / 100.0);
 const Vec2 Player::FOOT_SIZE_MAIN = Vec2(Player::PLAYER_SIZE.x, 8.0 / 100.0);
-//const Vec2 Player::FOOT_SIZE_SIDE = /*Player::FOOT_SIZE_MAIN + */Vec2(8.0 / 100.0, 0);
 const Vec2 Player::SIDE_SIZE = Vec2(8.0 / 100.0, 8.0 / 100.0);
 const double Player::MAX_SPEED_GROUND = 4.0;
 const double Player::MAX_SPEED_AIR = MAX_SPEED_GROUND * 2.0 / 3.0;
-const double Player::FORCE_AIR = 6.0;
+const double Player::FORCE_AIR = 12.0;
 const int Player::JUMP_LIMIT = 5;
 const int Player::SLASH_LIMIT = 30;
 const int Player::SLASH_COOLTIME = 15;
@@ -37,15 +36,16 @@ Player::Player(PhysicsWorld& world) :
 Player::Range::Range(PhysicsBody Pbody) :
 	body(RectF(Pbody.getPos(), PLAYER_SIZE)),
 	foot_main(RectF(Vec2(body._get_center().x, body.y + body.h), FOOT_SIZE_MAIN)),
-	bottomRight(RectF(body.pos + Vec2(body.w, 0.0), SIDE_SIZE)),
-	bottomLeft(RectF(body.pos + Vec2(-SIDE_SIZE.x, 0.0), SIDE_SIZE)),
-	upperRight(RectF(body.pos + Vec2(body.w, body.h - SIDE_SIZE.y), SIDE_SIZE)),
-	upperLeft(RectF(body.pos + Vec2(-SIDE_SIZE.x, body.h - SIDE_SIZE.y), SIDE_SIZE)) {
+	bottomRight(RectF(body.pos + Vec2(body.w, body.h - SIDE_SIZE.y), SIDE_SIZE)),
+	bottomLeft(RectF(body.pos + Vec2(-SIDE_SIZE.x, body.h - SIDE_SIZE.y), SIDE_SIZE)),
+	upperRight(RectF(body.pos + Vec2(body.w, 0.0), SIDE_SIZE)),
+	upperLeft(RectF(body.pos + Vec2(-SIDE_SIZE.x, 0.0), SIDE_SIZE)) {
 
 }
 
 Player::Flag::Flag() :
 	onGround(false),
+	onWall(false),
 	jump(false),
 	slash(false),
 	slashStage(0) {
@@ -55,18 +55,18 @@ Player::Flag::Flag() :
 void Player::update(const EnemyManager& enemymanager, const std::vector<std::shared_ptr<Object>>& obj, double& time_speed) {
 	timeControl(time_speed);
 	reflectPhysics();
+	slash(time_speed);
 	move(obj, time_speed);
 	checkDir();
-	slash();
 }
 
 void Player::timeControl(double& time_speed) {
 	time_speed = 1.0 - GameSystem::get().input.triggerL * 0.8;
 }
 
-void Player::slash() {
+void Player::slash(const double& time_speed) {
 	if (flag.slash) {
-		slashCount++;
+		slashCount += time_speed;
 		if (slashCount > SLASH_LIMIT) {
 			slashCount = 0;
 			flag.slash = false;
@@ -84,7 +84,7 @@ void Player::slash() {
 	}
 
 	for (auto elem : attacks) {
-		elem->update();
+		elem->update(time_speed);
 	}
 	auto rmvIter = std::remove_if(attacks.begin(), attacks.end(), [](const std::shared_ptr<Attack>& a) {
 		return a->isDead;
@@ -95,16 +95,16 @@ void Player::slash() {
 void Player::addSlash() {
 	switch (flag.slashStage) {
 	case 0:
-		attacks.emplace_back(std::make_shared<Slash1>(pos + Vec2(dir*32.0 / 100.0, 0)));
+		attacks.emplace_back(std::make_shared<Slash1>(pos + Vec2(dir*PLAYER_SIZE.x, 0), dir));
 		flag.slashStage++;
 		break;
 	case 1:
-		attacks.emplace_back(std::make_shared<Slash2>(pos + Vec2(dir*32.0 / 100.0, 0)));
+		attacks.emplace_back(std::make_shared<Slash2>(pos + Vec2(dir*PLAYER_SIZE.x, 0), dir));
 		slashCount = 0;
 		flag.slashStage++;
 		break;
 	case 2:
-		attacks.emplace_back(std::make_shared<Slash3>(pos + Vec2(dir*32.0 / 100.0, 0)));
+		attacks.emplace_back(std::make_shared<Slash3>(pos + Vec2(dir*PLAYER_SIZE.x, 0), dir));
 		slashCount = 0;
 		flag.slashStage++;
 		break;
@@ -120,45 +120,68 @@ void Player::reflectPhysics() {
 	velocity = body.getVelocity();
 
 	range.foot_main.setCenter(pos.x, range.body.y + range.body.h + range.foot_main.h / 2.0);
-	range.bottomRight.setPos(range.body.pos + Vec2(range.body.w, 0.0));
-	range.bottomLeft.setPos(range.body.pos + Vec2(-SIDE_SIZE.x, 0.0));
-	range.upperRight.setPos(range.body.pos + Vec2(range.body.w, range.body.h - SIDE_SIZE.y));
-	range.upperLeft.setPos(range.body.pos + Vec2(-SIDE_SIZE.x, range.body.h - SIDE_SIZE.y));
+	range.bottomRight.setPos(range.body.pos + Vec2(range.body.w, range.body.h - SIDE_SIZE.y));
+	range.bottomLeft.setPos(range.body.pos + Vec2(-SIDE_SIZE.x, range.body.h - SIDE_SIZE.y));
+	range.upperRight.setPos(range.body.pos + Vec2(range.body.w, 0.0));
+	range.upperLeft.setPos(range.body.pos + Vec2(-SIDE_SIZE.x, 0.0));
 
 
 }
 
 void Player::move(const std::vector<std::shared_ptr<Object>>& obj, const double& time_speed) {
+	
+	if (flag.slash) {
+		//¡‚ÍŽ~‚Ü‚é‚¾‚¯‚¾‚ªA‘O‚Éi‚Þ‚æ‚¤‚É‚·‚é
+		body.setVelocity(Vec2(0.0, 0.0));
+		body.setGravityScale(0.0);
+	}
+	else {
+		body.setGravityScale(2);
+		checkTouch(obj);
+
+		//*Œ»ÝAŠR‚©‚ç~‚è‚é‚Æ‚«‚É”ò‚Ño‚³‚´‚é‚ð“¾‚È‚¢ó‘Ô
+		if (flag.onGround) {
+			body.setVelocity(Vec2(MAX_SPEED_GROUND * GameSystem::get().input.stick.L.x, velocity.y));
+		}
+		else {
+			if (velocity.x > -MAX_SPEED_AIR && velocity.x < MAX_SPEED_AIR) {
+				body.applyForce(Vec2(FORCE_AIR * GameSystem::get().input.stick.L.x, 0));
+				if (body.getVelocity().x < -MAX_SPEED_AIR) {
+					body.setVelocity(Vec2(-MAX_SPEED_AIR, velocity.y));
+				}
+				else if (body.getVelocity().x > MAX_SPEED_AIR) {
+					body.setVelocity(Vec2(MAX_SPEED_AIR, velocity.y));
+				}
+			}
+			else {
+				if (velocity.x > 0 && GameSystem::get().input.stick.L.x < 0) {
+					body.applyForce(Vec2(FORCE_AIR * GameSystem::get().input.stick.L.x, 0));
+				}
+				if (velocity.x < 0 && GameSystem::get().input.stick.L.x > 0) {
+					body.applyForce(Vec2(FORCE_AIR * GameSystem::get().input.stick.L.x, 0));
+				}
+			}
+		}
+		jump(obj, time_speed);
+	}
+}
+
+void Player::checkTouch(const std::vector<std::shared_ptr<Object>>& obj) {
 
 	flag.onGround = false;
+	flag.onWall = false;
+
 	for (auto elem : obj) {
+		//’n–Ê‚Ö‚ÌÚ’n”»’è‚ð—Dæ
 		if (range.foot_main.intersects(elem->range)) {
-			body.setVelocity(Vec2(MAX_SPEED_GROUND * GameSystem::get().input.stick.L.x, velocity.y));
 			flag.onGround = true;
 			break;
 		}
-	}
-	if (!flag.onGround) {
-		if (velocity.x > -MAX_SPEED_AIR && velocity.x < MAX_SPEED_AIR) {
-			body.applyForce(Vec2(FORCE_AIR * GameSystem::get().input.stick.L.x, 0));
-			if (body.getVelocity().x < -MAX_SPEED_AIR) {
-				body.setVelocity(Vec2(-MAX_SPEED_AIR, velocity.y));
-			}
-			else if (body.getVelocity().x > MAX_SPEED_AIR) {
-				body.setVelocity(Vec2(MAX_SPEED_AIR, velocity.y));
-			}
-		}
-		else {
-			if (velocity.x > 0 && GameSystem::get().input.stick.L.x < 0) {
-				body.applyForce(Vec2(FORCE_AIR * GameSystem::get().input.stick.L.x, 0));
-			}
-			if (velocity.x < 0 && GameSystem::get().input.stick.L.x > 0) {
-				body.applyForce(Vec2(FORCE_AIR * GameSystem::get().input.stick.L.x, 0));
-			}
+		else if (range.bottomLeft.intersects(elem->range) || range.bottomRight.intersects(elem->range)) {
+			flag.onWall = true;
+			break;
 		}
 	}
-
-	jump(obj, time_speed);
 }
 
 void Player::jump(const std::vector<std::shared_ptr<Object>>& obj, const double& time_speed) {
@@ -167,7 +190,7 @@ void Player::jump(const std::vector<std::shared_ptr<Object>>& obj, const double&
 		if (GameSystem::get().input.jump.get_clicked()) {
 			body.setVelocity(Vec2(velocity.x, -5.0));
 			flag.jump = true;
-
+			jumpCount = 0;
 		}
 	}
 	else {
@@ -176,12 +199,14 @@ void Player::jump(const std::vector<std::shared_ptr<Object>>& obj, const double&
 				if (GameSystem::get().input.jump.get_clicked()) {
 					body.setVelocity(Vec2(5.0, -5.0));
 					flag.jump = true;
+					jumpCount = 0;
 				}
 			}
 			else if (range.bottomRight.intersects(elem->range)) {
 				if (GameSystem::get().input.jump.get_clicked()) {
 					body.setVelocity(Vec2(-5.0, -5.0));
 					flag.jump = true;
+					jumpCount = 0;
 				}
 			}
 		}
@@ -189,9 +214,9 @@ void Player::jump(const std::vector<std::shared_ptr<Object>>& obj, const double&
 	if (flag.jump) {
 		if ((jumpCount < JUMP_LIMIT) && GameSystem::get().input.jump.get_pressed()) {
 			if ((jumpCount > 3)) {
-				body.applyForce(Vec2(0.0, -200.0) / time_speed);
+				body.applyForce(Vec2(0.0, -200.0));
 			}
-			jumpCount++;
+			jumpCount += time_speed;
 		}
 		else {
 			flag.jump = false;
@@ -228,6 +253,8 @@ void Player::draw() const {
 		Println(velocity);
 		Print(L"player.body.getVelocity():");
 		Println(body.getVelocity());
+		Print(L"player.body.getGravityScale():");
+		Println(body.getGravityScale());
 		Print(L"slashCount:");
 		Println(slashCount);
 		Print(L"flag.slashStage:");

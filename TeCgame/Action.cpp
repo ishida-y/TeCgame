@@ -35,7 +35,7 @@ void Action::draw() const {
 
 	if (GameSystem::get().debug) {
 		Println(L"Action");
-		Print(L"time_speed");
+		Print(L"time_speed:");
 		Println(time_speed);
 		Print(L"CameraPos:");
 		Println(camera.pos);
