@@ -62,7 +62,7 @@ private:
 	void move(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed);
 	void jump(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed);
 	void checkDir();
-	void checkTouch(const std::vector<std::shared_ptr<Object>>& obj);
+	void checkTouch(const std::vector<std::shared_ptr<Block>>& obj);
 	void timeControl(double& time_speed);
 	void reflectPhysics();
 	void slash(const double& time_speed);

@@ -165,7 +165,7 @@ void Player::move(const std::vector<std::shared_ptr<Block>>& obj, const double& 
 	}
 }
 
-void Player::checkTouch(const std::vector<std::shared_ptr<Object>>& obj) {
+void Player::checkTouch(const std::vector<std::shared_ptr<Block>>& obj) {
 
 	flag.onGround = false;
 	flag.onWall = false;
