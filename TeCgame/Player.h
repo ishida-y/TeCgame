@@ -33,12 +33,13 @@ public:
 	void draw() const;
 
 private:
-	int jumpCount;
-	int slashCount;
+	double jumpCount;
+	double slashCount;
 
 	class Flag {
 	public:
 		bool onGround;
+		bool onWall;
 		bool jump;
 		bool slash;
 		int slashStage;
@@ -61,8 +62,9 @@ private:
 	void move(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed);
 	void jump(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed);
 	void checkDir();
+	void checkTouch(const std::vector<std::shared_ptr<Object>>& obj);
 	void timeControl(double& time_speed);
 	void reflectPhysics();
-	void slash();
+	void slash(const double& time_speed);
 	void addSlash();
 };

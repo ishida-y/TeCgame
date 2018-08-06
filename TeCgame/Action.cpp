@@ -44,5 +44,6 @@ void Action::draw() const {
 		map.draw(camera.pos);
 		UseOperator::get().draw();
 		player.draw();
+
 	}
 }
