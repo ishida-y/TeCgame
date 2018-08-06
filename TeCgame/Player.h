@@ -35,14 +35,19 @@ public:
 private:
 	double jumpCount;
 	double slashCount;
+	double shootCount;
 
 	class Flag {
 	public:
 		bool onGround;
-		bool onWall;
-		bool jump;
+		bool onRightWall;
+		bool onLeftWall;
+		bool inRising;
 		bool slash;
-		int slashStage;
+		bool shoot;
+		int slashPhase;
+		//int jumpPhase;
+		bool notDoubleJumpYet;
 
 		Flag();
 
@@ -57,6 +62,7 @@ private:
 	const static int JUMP_LIMIT; //ジャンプ入力受付時間
 	const static int SLASH_LIMIT; //slash状態解除までのフレーム数
 	const static int SLASH_COOLTIME; //次の攻撃が入力できるまでのフレーム数
+	const static int SHOOT_COOLTIME; //次の射撃が入力できるまでのフレーム数
 	//つまり SLASH_LIMIT > SLASH_COOLTIME
 
 	void move(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed);
@@ -67,4 +73,6 @@ private:
 	void reflectPhysics();
 	void slash(const double& time_speed);
 	void addSlash();
+	void shoot(const double& time_speed);
+	void attack(const double& time_speed);
 };

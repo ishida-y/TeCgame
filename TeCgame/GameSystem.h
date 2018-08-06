@@ -43,6 +43,7 @@ public:
 	Button back;
 	Button jump;
 	Button slash;
+	Button shoot;
 	Button zoomIn;
 	Button zoomOut;
 	Button menu;

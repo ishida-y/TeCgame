@@ -40,11 +40,29 @@ Slash3::Slash3(Vec2 _pos, int _DIR) :
 
 }
 
+Shoot::Shoot(Vec2 _pos, int _DIR) :
+	Attack(_pos,
+		RectF(_pos - (Vec2(16.0, 16.0) / 2.0 / 100.0), Vec2(16.0, 16.0) / 100.0), 
+		_DIR,
+		60,
+		5) {
+
+}
+
 void Slash::update(const double& time_speed) {
 	count += time_speed;
 	if (count > VANISH_LIMIT) {
 		isDead = true;
 	}
+}
+
+void Shoot::update(const double& time_speed) {
+	count += time_speed;
+	if (count > VANISH_LIMIT) {
+		isDead = true;
+	}
+	range.setPos(range.pos + time_speed*DIR*Vec2(10.0, 0.0) / 100.0);
+	pos = range._get_center();
 }
 
 void Slash1::draw() {
@@ -57,5 +75,10 @@ void Slash2::draw() {
 }
 void Slash3::draw() {
 	range.draw(Palette::Yellow);
+	Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * DIR, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+}
+
+void Shoot::draw() {
+	range.draw(Palette::Blue);
 	Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * DIR, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
 }

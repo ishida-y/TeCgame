@@ -36,6 +36,7 @@ KeyInput::KeyInput() :
 	back(XInput(0).buttonB, Gamepad(0).button(1), Input::KeyX),
 	jump(XInput(0).buttonA, Gamepad(0).button(2), Input::KeyZ),
 	slash(XInput(0).buttonX, Gamepad(0).button(0), Input::KeyX),
+	shoot(XInput(0).buttonY, Gamepad(0).button(3), Input::KeyC),
 	zoomIn(XInput(0).buttonUp, Gamepad(0).povForward, Input::KeyBackslash),
 	zoomOut(XInput(0).buttonDown, Gamepad(0).povBackward, Input::KeySlash),
 	menu(XInput(0).buttonStart, Gamepad(0).button(9), Input::KeyTab),
@@ -50,6 +51,7 @@ void KeyInput::update() {
 	back.update();
 	jump.update();
 	slash.update();
+	shoot.update();
 	zoomIn.update();
 	zoomOut.update();
 	menu.update();
