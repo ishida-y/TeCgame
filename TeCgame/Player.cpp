@@ -46,6 +46,7 @@ Player::Range::Range(PhysicsBody Pbody) :
 Player::Flag::Flag() :
 	onGround(false),
 	onWall(false),
+	//grab(false),
 	jump(false),
 	slash(false),
 	slashStage(0) {
@@ -55,6 +56,7 @@ Player::Flag::Flag() :
 void Player::update(const EnemyManager& enemymanager, const std::vector<std::shared_ptr<Object>>& obj, double& time_speed) {
 	timeControl(time_speed);
 	reflectPhysics();
+	//grab(obj, time_speed);//Ç¬Ç©Ç‹ÇË
 	slash(time_speed);
 	move(obj, time_speed);
 	checkDir();
@@ -63,6 +65,35 @@ void Player::update(const EnemyManager& enemymanager, const std::vector<std::sha
 void Player::timeControl(double& time_speed) {
 	time_speed = 1.0 - GameSystem::get().input.triggerL * 0.8;
 }
+
+//void Player::grab(const std::vector<std::shared_ptr<Object>>& obj, const double& time_speed) {
+//	static Vec2 cliff;
+//
+//	flag.grab = false;
+//	body.setGravityScale(2);
+//	for (auto elem : obj) {
+//		if (range.upperLeft.intersects(cliff = elem->range._get_tr() + Vec2(1,0))) {
+//			flag.grab = true;
+//			dir = -1;
+//			break;
+//		}
+//		else if (range.upperRight.intersects(cliff = elem->range._get_tl())) {
+//			flag.grab = true;
+//			dir = 1;
+//			break;
+//		}
+//	}
+//
+//	if (flag.grab) {
+//		body.setGravityScale(0);
+//		if (dir == -1) {
+//			body.setPos(cliff);
+//		}
+//		else if (dir == 1) {
+//			body.setPos(cliff + Vec2(-range.body.w, 0.0));
+//		}
+//	}
+//}
 
 void Player::slash(const double& time_speed) {
 	if (flag.slash) {
@@ -125,7 +156,6 @@ void Player::reflectPhysics() {
 	range.upperRight.setPos(range.body.pos + Vec2(range.body.w, 0.0));
 	range.upperLeft.setPos(range.body.pos + Vec2(-SIDE_SIZE.x, 0.0));
 
-
 }
 
 void Player::move(const std::vector<std::shared_ptr<Object>>& obj, const double& time_speed) {
@@ -134,6 +164,7 @@ void Player::move(const std::vector<std::shared_ptr<Object>>& obj, const double&
 		//ç°ÇÕé~Ç‹ÇÈÇæÇØÇæÇ™ÅAëOÇ…êiÇﬁÇÊÇ§Ç…Ç∑ÇÈ
 		body.setVelocity(Vec2(0.0, 0.0));
 		body.setGravityScale(0.0);
+		
 	}
 	else {
 		body.setGravityScale(2);
@@ -186,7 +217,10 @@ void Player::checkTouch(const std::vector<std::shared_ptr<Object>>& obj) {
 
 void Player::jump(const std::vector<std::shared_ptr<Object>>& obj, const double& time_speed) {
 
-	if (flag.onGround) {
+	//if (flag.grab) {
+	//	flag.jump = false;
+	//}
+	if (flag.onGround/* || flag.grab*/) {
 		if (GameSystem::get().input.jump.get_clicked()) {
 			body.setVelocity(Vec2(velocity.x, -5.0));
 			flag.jump = true;
@@ -249,12 +283,14 @@ void Player::draw() const {
 		Println(pos);
 		Print(L"player.dir:");
 		Println(dir);
-		Print(L"player.velocity:");
-		Println(velocity);
-		Print(L"player.body.getVelocity():");
-		Println(body.getVelocity());
-		Print(L"player.body.getGravityScale():");
-		Println(body.getGravityScale());
+		//Print(L"player.flag.grab:");
+		//Println(flag.grab);
+		//Print(L"player.velocity:");
+		//Println(velocity);
+		//Print(L"player.body.getVelocity():");
+		//Println(body.getVelocity());
+		//Print(L"player.body.getGravityScale():");
+		//Println(body.getGravityScale());
 		Print(L"slashCount:");
 		Println(slashCount);
 		Print(L"flag.slashStage:");

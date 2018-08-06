@@ -40,6 +40,7 @@ private:
 	public:
 		bool onGround;
 		bool onWall;
+		//bool grab;
 		bool jump;
 		bool slash;
 		int slashStage;
@@ -61,6 +62,7 @@ private:
 
 	void move(const std::vector<std::shared_ptr<Object>>& obj, const double& time_speed);
 	void jump(const std::vector<std::shared_ptr<Object>>& obj, const double& time_speed);
+	//void grab(const std::vector<std::shared_ptr<Object>>& obj, const double& time_speed);
 	void checkDir();
 	void checkTouch(const std::vector<std::shared_ptr<Object>>& obj);
 	void timeControl(double& time_speed);
