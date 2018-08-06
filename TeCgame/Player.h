@@ -2,7 +2,7 @@
 #include<Siv3D.hpp>
 #include<HamFramework.hpp>
 
-#include"Enemy.h"
+#include"EnemyManager.h"
 #include"Attack.h"
 
 
@@ -29,7 +29,7 @@ public:
 
 
 	Player(PhysicsWorld& world);
-	void update(const EnemyManager& enemymanager, const std::vector<std::shared_ptr<Object>>& obj, double& time_speed);
+	void update(const EnemyManager& enemymanager, const std::vector<std::shared_ptr<Block>>& obj, double& time_speed);
 	void draw() const;
 
 private:
@@ -58,8 +58,8 @@ private:
 	const static int SLASH_COOLTIME; //ŽŸ‚ÌUŒ‚‚ª“ü—Í‚Å‚«‚é‚Ü‚Å‚ÌƒtƒŒ[ƒ€”
 	//‚Â‚Ü‚è SLASH_LIMIT > SLASH_COOLTIME
 
-	void move(const std::vector<std::shared_ptr<Object>>& obj, const double& time_speed);
-	void jump(const std::vector<std::shared_ptr<Object>>& obj, const double& time_speed);
+	void move(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed);
+	void jump(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed);
 	void checkDir();
 	void timeControl(double& time_speed);
 	void reflectPhysics();

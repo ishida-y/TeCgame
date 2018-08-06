@@ -1,5 +1,5 @@
 #include"Player.h"
-#include"Enemy.h"
+#include"EnemyManager.h"
 #include"GameSystem.h"
 
 #include<cmath>
@@ -14,7 +14,6 @@ const double Player::FORCE_AIR = 6.0;
 const int Player::JUMP_LIMIT = 5;
 const int Player::SLASH_LIMIT = 30;
 const int Player::SLASH_COOLTIME = 15;
-
 
 
 
@@ -52,7 +51,7 @@ Player::Flag::Flag() :
 
 }
 
-void Player::update(const EnemyManager& enemymanager, const std::vector<std::shared_ptr<Object>>& obj, double& time_speed) {
+void Player::update(const EnemyManager& enemymanager, const std::vector<std::shared_ptr<Block>>& obj, double& time_speed) {
 	timeControl(time_speed);
 	reflectPhysics();
 	move(obj, time_speed);
@@ -128,7 +127,7 @@ void Player::reflectPhysics() {
 
 }
 
-void Player::move(const std::vector<std::shared_ptr<Object>>& obj, const double& time_speed) {
+void Player::move(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed) {
 
 	flag.onGround = false;
 	for (auto elem : obj) {
@@ -161,7 +160,7 @@ void Player::move(const std::vector<std::shared_ptr<Object>>& obj, const double&
 	jump(obj, time_speed);
 }
 
-void Player::jump(const std::vector<std::shared_ptr<Object>>& obj, const double& time_speed) {
+void Player::jump(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed) {
 
 	if (flag.onGround) {
 		if (GameSystem::get().input.jump.get_clicked()) {

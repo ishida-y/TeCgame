@@ -1,10 +1,9 @@
-/*
-#include"ObjectManager.h"
+#include"BlockManager.h"
 #include "UseOperator.h"
 #include"GameSystem.h"
 
 
-ObjectManager::ObjectManager(String _type) :
+BlockManager::BlockManager(String _type) :
 	type(_type) {
 	//ì™ÇÕãÛ
 	//names.emplace_back(L"");
@@ -20,14 +19,14 @@ ObjectManager::ObjectManager(String _type) :
 
 	//csvì«Ç›çûÇ›
 	const CSVReader csv(L"sample.csv");
-	if (!csv){
+	if (!csv) {
 		return;
 	}
 	for (int i = 0; i < csv.rows; i++) {
 		if (csv.get<String>(i, 0) == type) {
 			for (int j = 0; j < names.size(); j++) {
 				if (csv.get<String>(i, 1) == names[j]) {
-					objs.emplace_back(std::make_shared<Object>(csv.get<String>(i, 1), csv.get<Vec2>(i, 2), csv.get<double>(i, 3), csv.get<Vec2>(i, 4), csv.get<int>(i, 5)));
+					objs.emplace_back(std::make_shared<Block>(csv.get<String>(i, 1), csv.get<Vec2>(i, 2), csv.get<double>(i, 3), csv.get<Vec2>(i, 4), csv.get<int>(i, 5)));
 					break;
 				}
 			}
@@ -35,17 +34,16 @@ ObjectManager::ObjectManager(String _type) :
 	}
 }
 
-void ObjectManager::useUpdate() {
+void BlockManager::useUpdate(PhysicsWorld& Pworld, PhysicsWorld& Eworld) {
 	if (GameSystem::get().debug) {
 		Print(L"Objs:");
 		Println(objs.size());
 	}
 	for (auto i : objs) {
 		if (1) {//Ç‡ÇµÉvÉåÉCÉÑÅ[Ç∆ãﬂÇ©Ç¡ÇΩÇÁ
-			if (!(i->isUsing)) {
-				UseOperator::get().addUsing(i);
+			if (!(i->obj.isUsing)) {
+				UseOperator::get().addUsingBlock(i, Pworld, Eworld);
 			}
 		}
 	}
 }
-*/
