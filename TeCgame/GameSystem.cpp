@@ -2,17 +2,33 @@
 
 const bool GameSystem::debug = true;
 
-GameSystem::GameSystem() {
+GameSystem::GameSystem() :
+openMenu(false){
 
 }
 
 void GameSystem::update() {
 	input.update();
+	if (input.menu.get_clicked() && !openMenu) {
+		openMenu = true;
+	}
+	else if (input.menu.get_clicked() && openMenu) {
+		openMenu = false;
+	}
 
 	if (debug) {
 		Print(L"triggerL:");
 		Println(input.triggerL);
 	}
+}
+
+void GameSystem::updateMenu() {
+
+}
+
+void GameSystem::drawMenu() {
+	RectF(Vec2(0, 0), Vec2(1280, 720)).draw(Color(0, 0, 0, 64));
+	RectF(Vec2(280, 157), Vec2(720, 405)).draw(Color(255, 255, 255, 192));
 }
 
 KeyInput::KeyInput() :
@@ -22,6 +38,7 @@ KeyInput::KeyInput() :
 	slash(XInput(0).buttonX, Gamepad(0).button(0), Input::KeyX),
 	zoomIn(XInput(0).buttonUp, Gamepad(0).povForward, Input::KeyBackslash),
 	zoomOut(XInput(0).buttonDown, Gamepad(0).povBackward, Input::KeySlash),
+	menu(XInput(0).buttonStart, Gamepad(0).button(9), Input::KeyTab),
 	triggerR(0),
 	triggerL(0) {
 	XInput(0).setRightTriggerDeadZone();
@@ -35,6 +52,7 @@ void KeyInput::update() {
 	slash.update();
 	zoomIn.update();
 	zoomOut.update();
+	menu.update();
 	if (XInput(0).isConnected()) {
 		triggerR = XInput(0).rightTrigger;
 		triggerL = XInput(0).leftTrigger;

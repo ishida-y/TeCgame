@@ -1,3 +1,4 @@
+/*
 #pragma once
 #include"Object.h"
 #include<Siv3D.hpp>
@@ -11,3 +12,4 @@ public:
 	std::vector<String> names;
 	std::vector<std::shared_ptr<Object>> objs;
 };
+*/

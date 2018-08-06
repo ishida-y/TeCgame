@@ -166,8 +166,11 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Attack.cpp" />
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="Block.cpp" />
+    <ClCompile Include="BlockManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="GameSystem.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -296,8 +299,11 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Attack.h" />
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="Block.h" />
+    <ClInclude Include="BlockManager.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="GameSystem.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Object.h" />

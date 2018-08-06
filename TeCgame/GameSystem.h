@@ -45,6 +45,7 @@ public:
 	Button slash;
 	Button zoomIn;
 	Button zoomOut;
+	Button menu;
 	double triggerR;
 	double triggerL;
 	Stick stick;
@@ -71,6 +72,10 @@ public:
 		return inst;
 	}
 	void update();
+	void drawMenu();
+	void updateMenu();
+
+	bool openMenu;
 
 	KeyInput input;
 	SoundManager sound;

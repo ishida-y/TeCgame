@@ -1,7 +1,9 @@
 #include"Enemy.h"
 #include"Player.h"
+#include "UseOperator.h"
 
-Enemy::Enemy() :
+Enemy::Enemy(String _name, Vec2 _pos, double _rot, Vec2 _scale, int _alpha) :
+	obj(_name, _pos, _rot, _scale, _alpha),
 	hp(100),
 	atc_range(RectF(0, 0, 0, 0)),
 	atc_c(0),
@@ -13,11 +15,25 @@ Enemy::Enemy() :
 	c_hit(0),
 	atc_damage(0),
 	hit_damage(0) {
-
+	range = RectF((obj.pos - TextureAsset(obj.name).size / 2.0) / 100.0, TextureAsset(obj.name).size / 100.0);
 }
 
-void Enemy::update(const Player& player, const std::vector<std::shared_ptr<Object>>& obj) {
-	//check_dir();
+
+void Enemy::use(PhysicsWorld& world) {
+	obj.isUsing = true;
+	range = RectF((obj.pos - TextureAsset(obj.name).size / 2.0) / 100.0, TextureAsset(obj.name).size / 100.0);
+	body.reset(new PhysicsBody(world.createRect(Vec2(0, 0), range, PhysicsMaterial(1.0, 0.0, 0.0), none, PhysicsBodyType::Dynamic)));
+	body->setGravityScale(2.0);
+	body->setFixedRotation(true);
+}
+
+void Enemy::disuse() {
+	obj.isUsing = false;
+	body.reset();
+}
+
+void Enemy::update(const Player& player, const std::vector<std::shared_ptr<Block>>& obj) {
+	check_dir();
 	move(player);
 	slash(player);
 	check_hit(player);
@@ -26,10 +42,10 @@ void Enemy::update(const Player& player, const std::vector<std::shared_ptr<Objec
 
 void Enemy::check_dir() {
 	if (c_hit == 0) {
-		if (body.getVelocity().x > 0 && dir == -1) {
+		if (body->getVelocity().x > 0 && dir == -1) {
 			dir = 1;
 		}
-		if (body.getVelocity().x < 0 && dir == 1) {
+		if (body->getVelocity().x < 0 && dir == 1) {
 			dir = -1;
 		}
 	}
@@ -45,27 +61,24 @@ void Enemy::check_dead() {
 }
 
 
-EnemyManager::EnemyManager() {
+SampleEnemy::SampleEnemy(String _name, Vec2 _pos, double _rot, Vec2 _scale, int _alpha) :
+	Enemy(_name, _pos, _rot, _scale, _alpha) {
 
 }
 
-void EnemyManager::update(const Player& player, const std::vector<std::shared_ptr<Object>>& obj) {
-	world.update();
-	for (int i = 0; i < enemies.size(); i++) {
-		enemies[i]->update(player, obj);
-	}
-	dead();
+void SampleEnemy::draw() const {
+	//TextureAsset(obj.name).scale(obj.scale / 100.0).rotate(obj.rot).draw(obj.pos / 100.0 - TextureAsset(obj.name).size / 2.0 / 100.0, Color(255, 255, 255, obj.alpha));
+	body->draw(Palette::Gray);
 }
 
-void EnemyManager::dead() {
-	auto rmvIter = std::remove_if(enemies.begin(), enemies.end(), [](const std::shared_ptr<Enemy>& a) {
-		return a->isDead;
-	});
-	enemies.erase(rmvIter, enemies.end());
+void SampleEnemy::move(const Player& player){
+
 }
 
-void EnemyManager::draw() const {
-	for (int i = 0; i < enemies.size(); i++) {
-		enemies[i]->draw();
-	}
+void SampleEnemy::slash(const Player& player){
+
+}
+
+void SampleEnemy::check_hit(const Player& player){
+
 }

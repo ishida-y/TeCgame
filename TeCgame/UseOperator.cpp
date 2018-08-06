@@ -5,34 +5,52 @@ UseOperator::UseOperator() {
 
 }
 
-void UseOperator::init(PhysicsWorld &pworld) {
-	Pworld = &pworld;
-}
-
 void UseOperator::draw() {
-	for (auto i : useObjs) {
+	for (auto i : useBlocks) {
 		i->draw();
 	}
-	if (GameSystem::get().debug) {
-		Print(L"useObjs:");
-		Println(useObjs.size());
+	for (int i = 0; i < useEnemies.size(); i++) {
+		useEnemies[i]->draw();
 	}
 }
 
-void UseOperator::addUsing(std::shared_ptr<Object> obj) {
-	useObjs.emplace_back(obj);
-	obj->use(*Pworld);
+void UseOperator::addUsingBlock(std::shared_ptr<Block> obj, PhysicsWorld& Pworld, PhysicsWorld& Eworld) {
+	useBlocks.emplace_back(obj);
+	obj->use(Pworld, Eworld);
+}
+
+void UseOperator::addUsingEnemy(std::shared_ptr<Enemy> obj, PhysicsWorld &world) {
+	useEnemies.emplace_back(obj);
+	obj->use(world);
 }
 
 void UseOperator::cheackUsing(Vec2 player) {
-	for (auto i : useObjs) {
+	for (auto i : useBlocks) {
 		if (0) {//もしプレイヤーと遠かったら
 			i->disuse();
 		}
 	}
-
-	auto rmvIter = std::remove_if(useObjs.begin(), useObjs.end(), [](const std::shared_ptr<Object>& a) {
-		return a->isUsing;
+	auto rmvIterB = std::remove_if(useBlocks.begin(), useBlocks.end(), [](const std::shared_ptr<Block>& a) {
+		return a->obj.isUsing;
 	});
-	useObjs.erase(rmvIter, useObjs.end());
+	useBlocks.erase(rmvIterB, useBlocks.end());
+
+	for (auto i : useEnemies) {
+		if (i->isDead) {
+			i->disuse();
+		}
+		else if (0) {//もしプレイヤーと遠かったら
+			i->disuse();
+		}
+	}
+	auto rmvIterE = std::remove_if(useEnemies.begin(), useEnemies.end(), [](const std::shared_ptr<Enemy>& a) {
+		return a->obj.isUsing;
+	});
+	useEnemies.erase(rmvIterE, useEnemies.end());
+}
+
+void UseOperator::update(Player& player) {
+	for (int i = 0; i < useEnemies.size(); i++) {
+		useEnemies[i]->update(player, useBlocks);
+	}
 }
