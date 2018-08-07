@@ -31,7 +31,7 @@ public:
 	virtual ~Enemy() = default;
 	void use(PhysicsWorld& world);
 	void disuse();
-	//void init();
+	void init(); //‰Šú‰»
 
 private:
 	virtual void move(const Player& player) = 0;
