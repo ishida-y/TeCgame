@@ -40,6 +40,16 @@ Slash3::Slash3(Vec2 _pos, int _DIR) :
 
 }
 
+DogSlash::DogSlash(Vec2 _pos, int _DIR) :
+	Slash(_pos,
+		_DIR,
+		10,
+		Vec2(64.0, 48.0) / 100.0,
+		10) {
+
+}
+
+
 Shoot::Shoot(Vec2 _pos, int _DIR) :
 	Attack(_pos,
 		RectF(_pos - (Vec2(16.0, 16.0) / 2.0 / 100.0), Vec2(16.0, 16.0) / 100.0), 
@@ -75,6 +85,11 @@ void Slash2::draw() {
 }
 void Slash3::draw() {
 	range.draw(Palette::Yellow);
+	Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * DIR, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+}
+
+void DogSlash::draw() {
+	range.draw(Palette::Orange);
 	Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * DIR, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
 }
 

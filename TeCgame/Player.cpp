@@ -51,22 +51,26 @@ Player::Flag::Flag() :
 	notDoubleJumpYet(true),
 	slash(false),
 	shoot(false),
-	slashPhase(0)/*,
-	jumpPhase(0)*/ {
+	hit(false),
+	slashPhase(0) {
 
 }
 
 void Player::update(const EnemyManager& enemymanager, const std::vector<std::shared_ptr<Block>>& obj, double& time_speed) {
 	timeControl(time_speed);
 	reflectPhysics();
+	checkHit(enemymanager, time_speed);
 	attack(time_speed);
-	//slash(time_speed);
 	move(obj, time_speed);
 	checkDir();
 }
 
 void Player::timeControl(double& time_speed) {
 	time_speed = 1.0 - GameSystem::get().input.triggerL * 0.8;
+}
+
+void Player::checkHit(const EnemyManager& enemymanager, const double& time_speed) {
+
 }
 
 void Player::attack(const double& time_speed) {
@@ -106,17 +110,12 @@ void Player::addSlash() {
 	switch (flag.slashPhase) {
 	case 0:
 		attacks.emplace_back(std::make_shared<Slash1>(pos + Vec2(dir*PLAYER_SIZE.x, 0), dir));
-		//flag.slashPhase++;
 		break;
 	case 1:
 		attacks.emplace_back(std::make_shared<Slash2>(pos + Vec2(dir*PLAYER_SIZE.x, 0), dir));
-		//slashCount = 0;
-		//flag.slashPhase++;
 		break;
 	case 2:
 		attacks.emplace_back(std::make_shared<Slash3>(pos + Vec2(dir*PLAYER_SIZE.x, 0), dir));
-		//slashCount = 0;
-		//flag.slashPhase++;
 		break;
 	}
 	slashCount = 0;

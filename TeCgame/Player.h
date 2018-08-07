@@ -48,6 +48,7 @@ private:
 		int slashPhase;
 		//int jumpPhase;
 		bool notDoubleJumpYet;
+		bool hit;
 
 		Flag();
 
@@ -75,4 +76,5 @@ private:
 	void addSlash();
 	void shoot(const double& time_speed);
 	void attack(const double& time_speed);
+	void checkHit(const EnemyManager& enemymanager, const double& time_speed);
 };

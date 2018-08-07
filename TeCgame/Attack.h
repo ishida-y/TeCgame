@@ -49,6 +49,13 @@ public:
 	void draw() override;
 };
 
+class DogSlash : public Slash {
+public:
+	DogSlash(Vec2 _pos, int _DIR);
+
+	void draw() override;
+};
+
 class Shoot : public Attack {
 public:
 	Shoot(Vec2 _pos, int _DIR);

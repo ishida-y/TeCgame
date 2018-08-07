@@ -36,7 +36,7 @@ void UseOperator::cheackUsing(Vec2 player) {
 	useBlocks.erase(rmvIterB, useBlocks.end());
 
 	for (auto i : useEnemies) {
-		if (i->isDead) {
+		if (i->flag.isDead) {
 			i->disuse();
 		}
 		else if (0) {//‚à‚µƒvƒŒƒCƒ„[‚Æ‰“‚©‚Á‚½‚ç
@@ -49,8 +49,8 @@ void UseOperator::cheackUsing(Vec2 player) {
 	useEnemies.erase(rmvIterE, useEnemies.end());
 }
 
-void UseOperator::update(Player& player) {
+void UseOperator::update(Player& player, const double time_speed) {
 	for (int i = 0; i < useEnemies.size(); i++) {
-		useEnemies[i]->update(player, useBlocks);
+		useEnemies[i]->update(player, useBlocks, time_speed);
 	}
 }
