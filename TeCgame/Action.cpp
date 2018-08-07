@@ -24,7 +24,7 @@ void Action::update() {
 	else {
 		player.update(map.enemymanager, UseOperator::get().useBlocks, time_speed);
 		map.update(time_speed);
-		UseOperator::get().update(player);
+		UseOperator::get().update(player, time_speed);
 
 		camera.update(player.pos);
 	}

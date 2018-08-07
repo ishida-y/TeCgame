@@ -20,12 +20,23 @@ EnemyManager::EnemyManager(String _type) :
 	}
 	for (int i = 0; i < csv.rows; i++) {
 		if (csv.get<String>(i, 0) == type) {
-			for (int j = 0; j < names.size(); j++) {
-				if (csv.get<String>(i, 1) == names[j]) {
-					enemies.emplace_back(std::make_shared<SampleEnemy>(csv.get<String>(i, 1), csv.get<Vec2>(i, 2), csv.get<double>(i, 3), csv.get<Vec2>(i, 4), csv.get<int>(i, 5)));
-					break;
-				}
+			if (csv.get<String>(i, 1) == L"obj1") {
+				enemies.emplace_back(std::make_shared<Dog>(csv.get<String>(i, 1), csv.get<Vec2>(i, 2), csv.get<double>(i, 3), csv.get<Vec2>(i, 4), csv.get<int>(i, 5)));
 			}
+			else if (csv.get<String>(i, 1) == L"obj2") {
+				enemies.emplace_back(std::make_shared<Drone>(csv.get<String>(i, 1), csv.get<Vec2>(i, 2), csv.get<double>(i, 3), csv.get<Vec2>(i, 4), csv.get<int>(i, 5)));
+			}
+			else if (csv.get<String>(i, 1) == L"obj3") {
+				enemies.emplace_back(std::make_shared<Tank>(csv.get<String>(i, 1), csv.get<Vec2>(i, 2), csv.get<double>(i, 3), csv.get<Vec2>(i, 4), csv.get<int>(i, 5)));
+			}
+
+
+			//for (int j = 0; j < names.size(); j++) {
+			//	if (csv.get<String>(i, 1) == names[j]) {
+			//		enemies.emplace_back(std::make_shared<SampleEnemy>(csv.get<String>(i, 1), csv.get<Vec2>(i, 2), csv.get<double>(i, 3), csv.get<Vec2>(i, 4), csv.get<int>(i, 5)));
+			//		break;
+			//	}
+			//}
 		}
 	}
 }
@@ -33,7 +44,7 @@ EnemyManager::EnemyManager(String _type) :
 void EnemyManager::useUpdate(PhysicsWorld& world) {
 	for (auto i : enemies) {
 		if (1) {//‚à‚µƒvƒŒƒCƒ„[‚Æ‹ß‚·‚¬‚¸‰“‚·‚¬‚È‚©‚Á‚½‚ç
-			if (!(i->obj.isUsing && !(i->isDead))) {
+			if (!(i->obj.isUsing && !(i->flag.isDead))) {
 				UseOperator::get().addUsingEnemy(i, world);
 			}
 		}

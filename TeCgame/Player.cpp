@@ -13,6 +13,7 @@ const double Player::FORCE_AIR = 12.0;
 const int Player::JUMP_LIMIT = 5;
 const int Player::SLASH_LIMIT = 30;
 const int Player::SLASH_COOLTIME = 15;
+const int Player::SHOOT_COOLTIME = 15;
 
 
 
@@ -25,7 +26,8 @@ Player::Player(PhysicsWorld& world) :
 	velocity(0,0),
 	flag(),
 	jumpCount(0),
-	slashCount(0) {
+	slashCount(0),
+	shootCount(0) {
 
 	body.setGravityScale(2.0);
 	body.setFixedRotation(true);
@@ -44,19 +46,21 @@ Player::Range::Range(PhysicsBody Pbody) :
 
 Player::Flag::Flag() :
 	onGround(false),
-	onWall(false),
-	//grab(false),
-	jump(false),
+	onRightWall(false),
+	inRising(false),
+	notDoubleJumpYet(true),
 	slash(false),
-	slashStage(0) {
+	shoot(false),
+	hit(false),
+	slashPhase(0) {
 
 }
 
 void Player::update(const EnemyManager& enemymanager, const std::vector<std::shared_ptr<Block>>& obj, double& time_speed) {
 	timeControl(time_speed);
 	reflectPhysics();
-	//grab(obj, time_speed);//Ç¬Ç©Ç‹ÇË
-	slash(time_speed);
+	checkHit(enemymanager, time_speed);
+	attack(time_speed);
 	move(obj, time_speed);
 	checkDir();
 }
@@ -65,54 +69,15 @@ void Player::timeControl(double& time_speed) {
 	time_speed = 1.0 - GameSystem::get().input.triggerL * 0.8;
 }
 
-//void Player::grab(const std::vector<std::shared_ptr<Object>>& obj, const double& time_speed) {
-//	static Vec2 cliff;
-//
-//	flag.grab = false;
-//	body.setGravityScale(2);
-//	for (auto elem : obj) {
-//		if (range.upperLeft.intersects(cliff = elem->range._get_tr() + Vec2(1,0))) {
-//			flag.grab = true;
-//			dir = -1;
-//			break;
-//		}
-//		else if (range.upperRight.intersects(cliff = elem->range._get_tl())) {
-//			flag.grab = true;
-//			dir = 1;
-//			break;
-//		}
-//	}
-//
-//	if (flag.grab) {
-//		body.setGravityScale(0);
-//		if (dir == -1) {
-//			body.setPos(cliff);
-//		}
-//		else if (dir == 1) {
-//			body.setPos(cliff + Vec2(-range.body.w, 0.0));
-//		}
-//	}
-//}
+void Player::checkHit(const EnemyManager& enemymanager, const double& time_speed) {
 
-void Player::slash(const double& time_speed) {
-	if (flag.slash) {
-		slashCount += time_speed;
-		if (slashCount > SLASH_LIMIT) {
-			slashCount = 0;
-			flag.slash = false;
-			flag.slashStage = 0;
-		}
-	}
-	else {
-		if (GameSystem::get().input.slash.get_clicked()) {
-			addSlash();
-			flag.slash = true;
-		}
-	}
-	if (GameSystem::get().input.slash.get_clicked() && slashCount > SLASH_COOLTIME) {
-		addSlash();
-	}
+}
 
+void Player::attack(const double& time_speed) {
+	slash(time_speed);
+	if (!flag.slash) {
+		shoot(time_speed);
+	}
 	for (auto elem : attacks) {
 		elem->update(time_speed);
 	}
@@ -120,24 +85,54 @@ void Player::slash(const double& time_speed) {
 		return a->isDead;
 	});
 	attacks.erase(rmvIter, attacks.end());
+
+}
+
+void Player::slash(const double& time_speed) {
+	if (flag.slash) {
+		slashCount += time_speed;
+		if (slashCount > SLASH_LIMIT) {
+			slashCount = 0;
+			flag.slash = false;
+			flag.slashPhase = 0;
+		}
+		if (GameSystem::get().input.slash.get_clicked() && slashCount > SLASH_COOLTIME) {
+			addSlash();
+		}
+	}
+	else if (GameSystem::get().input.slash.get_clicked()) {
+		addSlash();
+		flag.slash = true;
+	}
 }
 
 void Player::addSlash() {
-	switch (flag.slashStage) {
+	switch (flag.slashPhase) {
 	case 0:
 		attacks.emplace_back(std::make_shared<Slash1>(pos + Vec2(dir*PLAYER_SIZE.x, 0), dir));
-		flag.slashStage++;
 		break;
 	case 1:
 		attacks.emplace_back(std::make_shared<Slash2>(pos + Vec2(dir*PLAYER_SIZE.x, 0), dir));
-		slashCount = 0;
-		flag.slashStage++;
 		break;
 	case 2:
 		attacks.emplace_back(std::make_shared<Slash3>(pos + Vec2(dir*PLAYER_SIZE.x, 0), dir));
-		slashCount = 0;
-		flag.slashStage++;
 		break;
+	}
+	slashCount = 0;
+	flag.slashPhase++;
+}
+
+void Player::shoot(const double& time_speed) {
+	if (flag.shoot) {
+		shootCount += time_speed;
+		if (shootCount > SHOOT_COOLTIME) {
+			shootCount = 0;
+			flag.shoot = false;
+		}
+	}
+	else if (GameSystem::get().input.shoot.get_clicked()) {
+		attacks.emplace_back(std::make_shared<Shoot>(pos + Vec2(dir*PLAYER_SIZE.x, 0.0), dir));
+		flag.shoot = true;
 	}
 }
 
@@ -199,7 +194,8 @@ void Player::move(const std::vector<std::shared_ptr<Block>>& obj, const double& 
 void Player::checkTouch(const std::vector<std::shared_ptr<Block>>& obj) {
 
 	flag.onGround = false;
-	flag.onWall = false;
+	flag.onRightWall = false;
+	flag.onLeftWall = false;
 
 	for (auto elem : obj) {
 		//ínñ Ç÷ÇÃê⁄ínîªíËÇóDêÊ
@@ -207,8 +203,12 @@ void Player::checkTouch(const std::vector<std::shared_ptr<Block>>& obj) {
 			flag.onGround = true;
 			break;
 		}
-		else if (range.bottomLeft.intersects(elem->range) || range.bottomRight.intersects(elem->range)) {
-			flag.onWall = true;
+		else if (range.bottomLeft.intersects(elem->range)) {
+			flag.onRightWall = true;
+			break;
+		}
+		else if (range.bottomRight.intersects(elem->range)) {
+			flag.onLeftWall = true;
 			break;
 		}
 	}
@@ -216,35 +216,36 @@ void Player::checkTouch(const std::vector<std::shared_ptr<Block>>& obj) {
 
 void Player::jump(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed) {
 
-	//if (flag.grab) {
-	//	flag.jump = false;
-	//}
-	if (flag.onGround/* || flag.grab*/) {
+	if (flag.onGround) {
 		if (GameSystem::get().input.jump.get_clicked()) {
 			body.setVelocity(Vec2(velocity.x, -5.0));
-			flag.jump = true;
+			flag.inRising = true;
+			jumpCount = 0;
+		}
+		flag.notDoubleJumpYet = true;
+	}
+	else if (GameSystem::get().input.jump.get_clicked()) {
+		if (flag.onRightWall) {
+			body.setVelocity(Vec2(5.0, -5.0));
+			flag.inRising = true;
+			flag.notDoubleJumpYet = false;
+			jumpCount = 0;
+			
+		}
+		else if (flag.onLeftWall) {
+			body.setVelocity(Vec2(-5.0, -5.0));
+			flag.inRising = true;
+			flag.notDoubleJumpYet = false;
+			jumpCount = 0;
+		}
+		else if (flag.notDoubleJumpYet) {
+			body.setVelocity(Vec2(velocity.x, -5.0));
+			flag.inRising = true;
+			flag.notDoubleJumpYet = false;
 			jumpCount = 0;
 		}
 	}
-	else {
-		for (auto elem : obj){
-			if (range.bottomLeft.intersects(elem->range)) {
-				if (GameSystem::get().input.jump.get_clicked()) {
-					body.setVelocity(Vec2(5.0, -5.0));
-					flag.jump = true;
-					jumpCount = 0;
-				}
-			}
-			else if (range.bottomRight.intersects(elem->range)) {
-				if (GameSystem::get().input.jump.get_clicked()) {
-					body.setVelocity(Vec2(-5.0, -5.0));
-					flag.jump = true;
-					jumpCount = 0;
-				}
-			}
-		}
-	}
-	if (flag.jump) {
+	if (flag.inRising) {
 		if ((jumpCount < JUMP_LIMIT) && GameSystem::get().input.jump.get_pressed()) {
 			if ((jumpCount > 3)) {
 				body.applyForce(Vec2(0.0, -200.0));
@@ -252,7 +253,7 @@ void Player::jump(const std::vector<std::shared_ptr<Block>>& obj, const double& 
 			jumpCount += time_speed;
 		}
 		else {
-			flag.jump = false;
+			flag.inRising = false;
 			jumpCount = 0;
 		}
 	}
@@ -282,20 +283,15 @@ void Player::draw() const {
 		Println(pos);
 		Print(L"player.dir:");
 		Println(dir);
-		//Print(L"player.flag.grab:");
-		//Println(flag.grab);
-		//Print(L"player.velocity:");
-		//Println(velocity);
-		//Print(L"player.body.getVelocity():");
-		//Println(body.getVelocity());
-		//Print(L"player.body.getGravityScale():");
-		//Println(body.getGravityScale());
 		Print(L"slashCount:");
 		Println(slashCount);
-		Print(L"flag.slashStage:");
-		Println(flag.slashStage);
+		Print(L"flag.slashPhase:");
+		Println(flag.slashPhase);
 		Print(L"flag.slash:");
 		Println(flag.slash);
+		Print(L"input.shoot:");
+		Println(GameSystem::get().input.shoot.get_pressed());
+
 
 		for (auto elem : attacks) {
 			elem->draw();

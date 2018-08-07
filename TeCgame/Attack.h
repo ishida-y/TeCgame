@@ -34,19 +34,34 @@ class Slash1 : public Slash {
 public:
 	Slash1(Vec2 _pos, int _DIR);
 
-	void draw();
+	void draw() override;
 };
 class Slash2 : public Slash {
 public:
 	Slash2(Vec2 _pos, int _DIR);
 
-	void draw();
+	void draw() override;
 };
 class Slash3 : public Slash {
 public:
 	Slash3(Vec2 _pos, int _DIR);
 
-	void draw();
+	void draw() override;
+};
+
+class DogSlash : public Slash {
+public:
+	DogSlash(Vec2 _pos, int _DIR);
+
+	void draw() override;
+};
+
+class Shoot : public Attack {
+public:
+	Shoot(Vec2 _pos, int _DIR);
+
+	void update(const double& time_speed) override;
+	void draw() override;
 };
 
 class Animation {
