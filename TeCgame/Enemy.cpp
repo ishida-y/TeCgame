@@ -29,6 +29,7 @@ Enemy::Flag::Flag() :
 
 void Enemy::use(PhysicsWorld& world) {
 	obj.isUsing = true;
+	init();
 	range = RectF((obj.pos - TextureAsset(obj.name).size / 2.0) / 100.0, TextureAsset(obj.name).size / 100.0);
 	body.reset(new PhysicsBody(world.createRect(range.pos, RectF(range.size), PhysicsMaterial(1.0, 0.0, 0.0), none, PhysicsBodyType::Dynamic)));
 	body->setGravityScale(2.0);
@@ -74,6 +75,10 @@ void Enemy::check_dead() {
 	if (hp <= 0) {
 		flag.isDead = true;
 	}
+}
+
+void Enemy::init() {
+
 }
 
 SampleEnemy::SampleEnemy(String _name, Vec2 _pos, double _rot, Vec2 _scale, int _alpha) :
