@@ -24,7 +24,7 @@ void UseOperator::addUsingEnemy(std::shared_ptr<Enemy> obj, PhysicsWorld &world)
 	obj->use(world);
 }
 
-void UseOperator::cheackUsing(Vec2 player) {
+void UseOperator::checkUsing(Vec2 player) {
 	for (auto i : useBlocks) {
 		if (0) {//‚à‚µƒvƒŒƒCƒ„[‚Æ‰“‚©‚Á‚½‚ç
 			i->disuse();

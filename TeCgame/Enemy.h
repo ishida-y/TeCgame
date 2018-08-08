@@ -14,8 +14,8 @@ public:
 	std::shared_ptr<PhysicsBody> body;
 	RectF range;
 	Vec2 pos;
+	Vec2 velocity;
 	int hp;
-	//RectF atc_range;
 	int atc_c;
 	int dir;
 	int c_move;
@@ -47,8 +47,8 @@ protected:
 
 	virtual void attack(const double time_speed) = 0;
 	virtual void move(const Player& player, const double time_speed) = 0;
+	void reflectPhysics();
 	void check_dir();
-	//virtual void slash(const Player& player) = 0;
 	virtual void check_hit(const Player& player) = 0;
 	void check_dead();
 };
@@ -61,7 +61,6 @@ public:
 private:
 	void attack(const double time_speed);
 	void move(const Player& player, const double time_speed);
-	//void slash(const Player& player);
 	void check_hit(const Player& player);
 };
 
@@ -72,7 +71,6 @@ public:
 private:
 	void attack(const double time_speed);
 	void move(const Player& player, const double time_speed);
-	//void slash(const Player& player);
 	void check_hit(const Player& player);
 };
 
@@ -83,7 +81,6 @@ public:
 private:
 	void attack(const double time_speed);
 	void move(const Player& player, const double time_speed);
-	//void slash(const Player& player);
 	void check_hit(const Player& player);
 };
 
@@ -94,6 +91,5 @@ public:
 private:
 	void attack(const double time_speed);
 	void move(const Player& player, const double time_speed);
-	//void slash(const Player& player);
 	void check_hit(const Player& player);
 };

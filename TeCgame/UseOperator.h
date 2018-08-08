@@ -19,7 +19,7 @@ public:
 	}
 	void addUsingBlock(std::shared_ptr<Block> obj, PhysicsWorld& Pworld, PhysicsWorld& Eworld);
 	void addUsingEnemy(std::shared_ptr<Enemy> obj, PhysicsWorld &Eworld);
-	void cheackUsing(Vec2 player);
+	void checkUsing(Vec2 player);
 	void update(Player& player, const double time_speed);
 	void draw();
 };

@@ -69,6 +69,22 @@ void Player::timeControl(double& time_speed) {
 	time_speed = 1.0 - GameSystem::get().input.triggerL * 0.8;
 }
 
+void Player::reflectPhysics() {
+	//rangeとかbodyのpos(getPos)は長方形の左上
+	range.body.pos = body.getPos();
+	//こいつだけ中心座標
+	pos = range.body._get_center();
+
+	velocity = body.getVelocity();
+
+	range.foot_main.setCenter(pos.x, range.body.y + range.body.h + range.foot_main.h / 2.0);
+	range.bottomRight.setPos(range.body.pos + Vec2(range.body.w, range.body.h - SIDE_SIZE.y));
+	range.bottomLeft.setPos(range.body.pos + Vec2(-SIDE_SIZE.x, range.body.h - SIDE_SIZE.y));
+	range.upperRight.setPos(range.body.pos + Vec2(range.body.w, 0.0));
+	range.upperLeft.setPos(range.body.pos + Vec2(-SIDE_SIZE.x, 0.0));
+
+}
+
 void Player::checkHit(const EnemyManager& enemymanager, const double& time_speed) {
 
 }
@@ -96,7 +112,7 @@ void Player::slash(const double& time_speed) {
 			flag.slash = false;
 			flag.slashPhase = 0;
 		}
-		if (GameSystem::get().input.slash.get_clicked() && slashCount > SLASH_COOLTIME) {
+		if (GameSystem::get().input.slash.get_clicked() && slashCount > SLASH_COOLTIME && flag.slashPhase < 3) {
 			addSlash();
 		}
 	}
@@ -134,22 +150,6 @@ void Player::shoot(const double& time_speed) {
 		attacks.emplace_back(std::make_shared<Shoot>(pos + Vec2(dir*PLAYER_SIZE.x, 0.0), dir));
 		flag.shoot = true;
 	}
-}
-
-void Player::reflectPhysics() {
-	//rangeとかbodyのpos(getPos)は長方形の左上
-	range.body.pos = body.getPos();
-	//こいつだけ中心座標
-	pos = range.body._get_center();
-
-	velocity = body.getVelocity();
-
-	range.foot_main.setCenter(pos.x, range.body.y + range.body.h + range.foot_main.h / 2.0);
-	range.bottomRight.setPos(range.body.pos + Vec2(range.body.w, range.body.h - SIDE_SIZE.y));
-	range.bottomLeft.setPos(range.body.pos + Vec2(-SIDE_SIZE.x, range.body.h - SIDE_SIZE.y));
-	range.upperRight.setPos(range.body.pos + Vec2(range.body.w, 0.0));
-	range.upperLeft.setPos(range.body.pos + Vec2(-SIDE_SIZE.x, 0.0));
-
 }
 
 void Player::move(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed) {
