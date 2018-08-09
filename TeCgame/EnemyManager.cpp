@@ -1,4 +1,3 @@
-#include "EnemyManager.h"
 #include"UseOperator.h"
 
 EnemyManager::EnemyManager(String _type) :

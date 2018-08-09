@@ -29,13 +29,14 @@ public:
 
 
 	Player(PhysicsWorld& world);
-	void update(const EnemyManager& enemymanager, const std::vector<std::shared_ptr<Block>>& obj, double& time_speed);
+	void update(/*const EnemyManager& enemymanager*/const std::vector<std::shared_ptr<Enemy>>& enemys, const std::vector<std::shared_ptr<Block>>& obj, double& time_speed);
 	void draw() const;
 
 private:
 	double jumpCount;
 	double slashCount;
 	double shootCount;
+	double hitCount;
 
 	class Flag {
 	public:
@@ -53,6 +54,8 @@ private:
 		Flag();
 
 	} flag;
+
+	std::vector<std::weak_ptr<Attack>> hitEnemyAttack;
 
 	const static Vec2 PLAYER_SIZE;
 	const static Vec2 FOOT_SIZE_MAIN;
@@ -75,6 +78,6 @@ private:
 	void slash(const double& time_speed);
 	void addSlash();
 	void shoot(const double& time_speed);
-	void attack(const double& time_speed);
-	void checkHit(const EnemyManager& enemymanager, const double& time_speed);
+	void attack(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed);
+	void checkHit(/*const EnemyManager& enemymanager*/const std::vector<std::shared_ptr<Enemy>>& enemys, const double& time_speed);
 };

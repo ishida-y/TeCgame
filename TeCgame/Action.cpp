@@ -1,6 +1,6 @@
+#include "UseOperator.h"
 #include"Action.h"
 #include"GameSystem.h"
-#include "UseOperator.h"
 
 Action::Action() :
 	map(),
@@ -22,7 +22,7 @@ void Action::update() {
 	if (GameSystem::get().openMenu) {
 	}
 	else {
-		player.update(map.enemymanager, UseOperator::get().useBlocks, time_speed);
+		player.update(UseOperator::get().useEnemies, UseOperator::get().useBlocks, time_speed);
 		map.update(time_speed);
 		UseOperator::get().update(player, time_speed);
 

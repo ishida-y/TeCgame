@@ -1,7 +1,7 @@
 #pragma once
-#include"Block.h"
 #include<Siv3D.hpp>
 #include<HamFramework.hpp>
+#include"Block.h"
 
 class BlockManager {
 public:

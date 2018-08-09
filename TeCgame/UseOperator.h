@@ -1,8 +1,8 @@
 #pragma once
 #include<Siv3D.hpp>
 #include<HamFramework.hpp>
-#include"Block.h"
-#include "Enemy.h"
+#include"BlockManager.h"
+#include"EnemyManager.h"
 
 class UseOperator {
 private:

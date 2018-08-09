@@ -3,10 +3,11 @@
 #include<HamFramework.hpp>
 #include<vector>
 
-#include "Block.h"
 #include "Attack.h"
+#include "Object.h"
 
-class Player;
+extern class Player;
+extern class Block;
 
 class Enemy {
 public:
@@ -19,7 +20,6 @@ public:
 	int atc_c;
 	int dir;
 	int c_move;
-	int c_hit;
 	int atc_damage;
 	int hit_damage;
 
@@ -44,12 +44,16 @@ public:
 
 protected:
 	double attackCount;
+	double hitCount;
 
-	virtual void attack(const double time_speed) = 0;
+	std::vector<std::weak_ptr<Attack>> hitPlayerAttack; //一度ヒットしたプレイヤーの攻撃範囲オブジェクトのポインタを保存
+
+	virtual void attack(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed) = 0;
 	virtual void move(const Player& player, const double time_speed) = 0;
 	void reflectPhysics();
 	void check_dir();
-	virtual void check_hit(const Player& player) = 0;
+	//virtual void check_hit(const Player& player) = 0;
+	void check_hit(const Player& player, const double time_speed);
 	void check_dead();
 };
 
@@ -59,9 +63,8 @@ public:
 	SampleEnemy(String _name, Vec2 _pos, double _rot = 0.0, Vec2 _scale = Vec2(1.0, 1.0), int _alpha = 255);
 	void draw() const;
 private:
-	void attack(const double time_speed);
+	void attack(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed);
 	void move(const Player& player, const double time_speed);
-	void check_hit(const Player& player);
 };
 
 class Dog :public Enemy {
@@ -69,9 +72,8 @@ public:
 	Dog(String _name, Vec2 _pos, double _rot, Vec2 _scale, int _alpha);
 	void draw() const;
 private:
-	void attack(const double time_speed);
+	void attack(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed);
 	void move(const Player& player, const double time_speed);
-	void check_hit(const Player& player);
 };
 
 class Drone :public Enemy {
@@ -79,9 +81,8 @@ public:
 	Drone(String _name, Vec2 _pos, double _rot, Vec2 _scale, int _alpha);
 	void draw() const;
 private:
-	void attack(const double time_speed);
+	void attack(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed);
 	void move(const Player& player, const double time_speed);
-	void check_hit(const Player& player);
 };
 
 class Tank :public Enemy {
@@ -89,7 +90,6 @@ public:
 	Tank(String _name, Vec2 _pos, double _rot, Vec2 _scale, int _alpha);
 	void draw() const;
 private:
-	void attack(const double time_speed);
+	void attack(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed);
 	void move(const Player& player, const double time_speed);
-	void check_hit(const Player& player);
 };

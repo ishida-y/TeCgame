@@ -2,6 +2,8 @@
 #include<Siv3D.hpp>
 #include<HamFramework.hpp>
 
+extern class Block;
+
 class Attack {
 public:
 	const int VANISH_LIMIT;
@@ -14,7 +16,7 @@ public:
 	bool isDead;
 
 	Attack(Vec2 _pos, RectF _range, int _DIR, int _VANISH_LIMIT, int _POWER);
-	virtual void update(const double& time_speed) = 0;
+	virtual void update(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed) = 0;
 	virtual ~Attack() = default;
 
 	virtual void draw() = 0;//とりあえずデバッグ用
@@ -25,7 +27,7 @@ class Slash : public Attack {
 public:
 	Slash(Vec2 _pos, int _DIR, int _VANISH_LIMIT, Vec2 _SIZE, int _POWER);
 
-	void update(const double& time_speed) override;
+	void update(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed) override;
 	virtual ~Slash() = default;
 
 	virtual void draw() = 0;
@@ -60,7 +62,15 @@ class Shoot : public Attack {
 public:
 	Shoot(Vec2 _pos, int _DIR);
 
-	void update(const double& time_speed) override;
+	void update(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed) override;
+	void draw() override;
+};
+
+class TankShoot : public Attack {
+public:
+	TankShoot(Vec2 _pos, int _DIR);
+
+	void update(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed) override;
 	void draw() override;
 };
 
