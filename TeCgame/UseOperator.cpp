@@ -31,7 +31,7 @@ void UseOperator::checkUsing(Vec2 player) {
 		}
 	}
 	auto rmvIterB = std::remove_if(useBlocks.begin(), useBlocks.end(), [](const std::shared_ptr<Block>& a) {
-		return a->obj.isUsing;
+		return !a->obj.isUsing;
 	});
 	useBlocks.erase(rmvIterB, useBlocks.end());
 
@@ -44,13 +44,13 @@ void UseOperator::checkUsing(Vec2 player) {
 		}
 	}
 	auto rmvIterE = std::remove_if(useEnemies.begin(), useEnemies.end(), [](const std::shared_ptr<Enemy>& a) {
-		return a->obj.isUsing;
+		return !a->obj.isUsing;
 	});
 	useEnemies.erase(rmvIterE, useEnemies.end());
 }
 
 void UseOperator::update(Player& player, const double time_speed) {
-	for (int i = 0; i < useEnemies.size(); i++) {
-		useEnemies[i]->update(player, useBlocks, time_speed);
+	for (auto enemy : useEnemies) {
+		enemy->update(player, useBlocks, time_speed);
 	}
 }

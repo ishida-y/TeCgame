@@ -52,8 +52,7 @@ protected:
 	virtual void move(const Player& player, const double time_speed) = 0;
 	void reflectPhysics();
 	void check_dir();
-	//virtual void check_hit(const Player& player) = 0;
-	void check_hit(const Player& player, const double time_speed);
+	void checkHit(const Player& player, const double time_speed);
 	void check_dead();
 };
 
