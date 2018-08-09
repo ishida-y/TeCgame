@@ -23,13 +23,12 @@ void Action::update() {
 		GameSystem::get().updateMenu();
 	}
 	else {
-		UseOperator::get().checkUsing(player.pos);
 
 		player.update(UseOperator::get().useEnemies, UseOperator::get().useBlocks, time_speed);
 		map.update(time_speed);
 		UseOperator::get().update(player, time_speed);
 		ui.update(player, time_speed);
-
+		UseOperator::get().checkUsing(player.pos);
 		camera.update(player.pos);
 	}
 

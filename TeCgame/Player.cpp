@@ -352,7 +352,7 @@ void Player::jump(const std::vector<std::shared_ptr<Block>>& obj, const double& 
 }
 
 void Player::checkDir() {
-	if (!flag.hit) {
+	if (!flag.hit && !flag.slash) {
 		if (GameSystem::get().input.stick.L.x > 0.1 && dir == -1) {
 			dir = 1;
 		}
