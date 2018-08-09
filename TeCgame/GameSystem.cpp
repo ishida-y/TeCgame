@@ -32,8 +32,8 @@ void GameSystem::updateMenu() {
 			menuMode = 2;
 		}
 		if (input.enter.get_clicked()) {
-			toTitle = true;
 			openMenu = false;
+			toTitle = true;
 		}
 	}
 	else if (menuMode == 2) {

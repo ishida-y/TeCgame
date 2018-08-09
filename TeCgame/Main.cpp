@@ -6,6 +6,7 @@
 
 void Main()
 {
+	Window::SetTitle(L"Kronos Reiner");
 	Window::Resize(1280, 720);
 
 	SceneManager<String> manager;
