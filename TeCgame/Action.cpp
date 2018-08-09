@@ -13,6 +13,9 @@ Action::Action() :
 
 void Action::init() {
 	TextureAsset::Register(L"BackGround", L"Data/BackGround.png");
+	SoundAsset::Register(L"stage_bgm", L"Data/music/stage_bgm.mp3");
+	SoundAsset(L"stage_bgm").setLoop(true);
+	SoundAsset(L"stage_bgm").play();
 }
 
 //void Action::updateFadeIn() {
@@ -34,6 +37,7 @@ void Action::update() {
 	}
 
 	if (GameSystem::get().toTitle) {
+		SoundAsset(L"stage_bgm").pause(3.0s);
 		GameSystem::get().toTitle = false;
 		//player.init();
 		map.init();
