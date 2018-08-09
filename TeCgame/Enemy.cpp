@@ -156,18 +156,21 @@ void Tank::move(const Player& player, const double time_speed) {
 }
 
 void Tank::draw() const {
-	//TextureAsset(obj.name).scale(obj.scale / 100.0).rotate(obj.rot).draw(obj.pos / 100.0 - TextureAsset(obj.name).size / 2.0 / 100.0, Color(255, 255, 255, obj.alpha));
-	range.draw(Palette::Darkviolet);
-	//body->draw(Palette::Violet);
 
-	Circle(pos, 0.1).draw(Palette::Orange);
-	Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * dir, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+	if (GameSystem::get().debug) {
+		//TextureAsset(obj.name).scale(obj.scale / 100.0).rotate(obj.rot).draw(obj.pos / 100.0 - TextureAsset(obj.name).size / 2.0 / 100.0, Color(255, 255, 255, obj.alpha));
+		range.draw(Palette::Darkviolet);
+		//body->draw(Palette::Violet);
+
+		Circle(pos, 0.1).draw(Palette::Orange);
+		Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * dir, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
 
 
-	Println(L"hp:", hp);// .drawCenter(pos - Vec2(0.0, 0.1));
+		Println(L"hp:", hp);// .drawCenter(pos - Vec2(0.0, 0.1));
 
-	for (auto elem : attacks) {
-		elem->draw();
+		for (auto elem : attacks) {
+			elem->draw();
+		}
 	}
 }
 
@@ -208,15 +211,17 @@ void Dog::move(const Player& player, const double time_speed) {
 }
 
 void Dog::draw() const {
-	//TextureAsset(obj.name).scale(obj.scale / 100.0).rotate(obj.rot).draw(obj.pos / 100.0 - TextureAsset(obj.name).size / 2.0 / 100.0, Color(255, 255, 255, obj.alpha));
-	range.draw(Palette::Black);
-	//body->draw(Palette::Gray);
+	if (GameSystem::get().debug) {
+		//TextureAsset(obj.name).scale(obj.scale / 100.0).rotate(obj.rot).draw(obj.pos / 100.0 - TextureAsset(obj.name).size / 2.0 / 100.0, Color(255, 255, 255, obj.alpha));
+		range.draw(Palette::Black);
+		//body->draw(Palette::Gray);
 
-	Circle(pos, 0.1).draw(Palette::Red);
-	Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * dir, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+		Circle(pos, 0.1).draw(Palette::Red);
+		Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * dir, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
 
-	for (auto elem : attacks) {
-		elem->draw();
+		for (auto elem : attacks) {
+			elem->draw();
+		}
 	}
 }
 
@@ -246,16 +251,19 @@ void Drone::move(const Player& player, const double time_speed) {
 }
 
 void Drone::draw() const {
-	//TextureAsset(obj.name).scale(obj.scale / 100.0).rotate(obj.rot).draw(obj.pos / 100.0 - TextureAsset(obj.name).size / 2.0 / 100.0, Color(255, 255, 255, obj.alpha));
-	range.draw(Palette::Darkgreen);
-	//body->draw(Palette::Green);
 
-	Circle(pos, 0.1).draw(Palette::Yellow);
-	Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * dir, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+	if (GameSystem::get().debug) {
+		//TextureAsset(obj.name).scale(obj.scale / 100.0).rotate(obj.rot).draw(obj.pos / 100.0 - TextureAsset(obj.name).size / 2.0 / 100.0, Color(255, 255, 255, obj.alpha));
+		range.draw(Palette::Darkgreen);
+		//body->draw(Palette::Green);
+
+		Circle(pos, 0.1).draw(Palette::Yellow);
+		Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * dir, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
 
 
-	for (auto elem : attacks) {
-		elem->draw();
+		for (auto elem : attacks) {
+			elem->draw();
+		}
 	}
 }
 
@@ -268,9 +276,10 @@ SampleEnemy::SampleEnemy(String _name, Vec2 _pos, double _rot, Vec2 _scale, int 
 }
 
 void SampleEnemy::draw() const {
-	//TextureAsset(obj.name).scale(obj.scale / 100.0).rotate(obj.rot).draw(obj.pos / 100.0 - TextureAsset(obj.name).size / 2.0 / 100.0, Color(255, 255, 255, obj.alpha));
-	body->draw(Palette::Gray);
-
+	if (GameSystem::get().debug) {
+		//TextureAsset(obj.name).scale(obj.scale / 100.0).rotate(obj.rot).draw(obj.pos / 100.0 - TextureAsset(obj.name).size / 2.0 / 100.0, Color(255, 255, 255, obj.alpha));
+		body->draw(Palette::Gray);
+	}
 }
 
 void SampleEnemy::attack(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed) {
