@@ -12,7 +12,6 @@ Action::Action() :
 }
 
 void Action::init() {
-
 }
 
 //void Action::updateFadeIn() {

@@ -56,6 +56,12 @@ void UseOperator::update(Player& player, const double time_speed) {
 }
 
 void UseOperator::init() {
+	for (int i = 0; i < useEnemies.size(); i++) {
+		useEnemies[i]->disuse();
+	}
+	for (int i = 0; i < useBlocks.size(); i++) {
+		useBlocks[i]->disuse();
+	}
 	useEnemies.clear();
 	useBlocks.clear();
 }
