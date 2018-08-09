@@ -20,4 +20,5 @@ public:
 	Map();
 	void update(double& time_speed);
 	void draw(Vec2 camera) const;
+	void init();
 };

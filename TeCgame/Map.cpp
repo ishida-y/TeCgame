@@ -24,3 +24,7 @@ void Map::draw(Vec2 camera) const {
 	Dview.draw(camera);
 	Mview.draw(camera);
 }
+
+void Map::init() {
+	enemymanager.init();
+}

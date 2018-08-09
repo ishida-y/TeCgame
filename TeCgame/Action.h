@@ -5,6 +5,7 @@
 #include "Player.h"
 #include"Camera.h"
 #include"Map.h"
+#include"Ui.h"
 
 
 class Action : public SceneManager<String>::Scene {
@@ -12,6 +13,7 @@ public:
 	Map map;
 	Player player;
 	CameraManager camera;
+	Ui ui;
 
 	double time_speed;
 

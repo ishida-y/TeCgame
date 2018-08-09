@@ -3,14 +3,18 @@
 const bool GameSystem::debug = true;
 
 GameSystem::GameSystem() :
-openMenu(false){
-
+openMenu(false),
+menuMode(1),
+toTitle(false){
+	TextureAsset::Register(L"pose_exit", L"Data/pose/pose_exit.png");
+	TextureAsset::Register(L"pose_title", L"Data/pose/pose_title.png");
 }
 
 void GameSystem::update() {
 	input.update();
 	if (input.menu.get_clicked() && !openMenu) {
 		openMenu = true;
+		menuMode = 1;
 	}
 	else if (input.menu.get_clicked() && openMenu) {
 		openMenu = false;
@@ -23,12 +27,34 @@ void GameSystem::update() {
 }
 
 void GameSystem::updateMenu() {
-
+	if (menuMode == 1) {
+		if (input.stick.L.y < 0) {
+			menuMode = 2;
+		}
+		if (input.enter.get_clicked()) {
+			toTitle = true;
+			openMenu = false;
+		}
+	}
+	else if (menuMode == 2) {
+		if (input.stick.L.y > 0) {
+			menuMode = 1;
+		}
+		if (input.enter.get_clicked()) {
+			System::Exit();
+		}
+	}
 }
 
 void GameSystem::drawMenu() {
 	RectF(Vec2(0, 0), Vec2(1280, 720)).draw(Color(0, 0, 0, 64));
-	RectF(Vec2(280, 157), Vec2(720, 405)).draw(Color(255, 255, 255, 192));
+	//RectF(Vec2(280, 157), Vec2(720, 405)).draw(Color(255, 255, 255, 192));
+	if (menuMode == 1) {
+		TextureAsset(L"pose_title").draw(Vec2(280, 157));
+	}
+	if (menuMode == 2) {
+		TextureAsset(L"pose_exit").draw(Vec2(280, 157));
+	}
 }
 
 KeyInput::KeyInput() :

@@ -1,5 +1,6 @@
 #pragma once
 #include <Siv3D.hpp>
+#include<HamFramework.hpp>
 
 
 class Button {
@@ -75,6 +76,8 @@ public:
 	void update();
 	void drawMenu();
 	void updateMenu();
+	int menuMode;
+	bool toTitle;
 
 	bool openMenu;
 

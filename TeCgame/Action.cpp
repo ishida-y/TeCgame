@@ -6,7 +6,8 @@ Action::Action() :
 	map(),
 	player(map.Pworld),
 	camera(player.pos),
-	time_speed(1.0) {
+	time_speed(1.0),
+	ui(){
 
 }
 
@@ -20,13 +21,22 @@ void Action::init() {
 
 void Action::update() {
 	if (GameSystem::get().openMenu) {
+		GameSystem::get().updateMenu();
 	}
 	else {
 		player.update(UseOperator::get().useEnemies, UseOperator::get().useBlocks, time_speed);
 		map.update(time_speed);
 		UseOperator::get().update(player, time_speed);
-
+		ui.update(player, time_speed);
 		camera.update(player.pos);
+	}
+
+	if (GameSystem::get().toTitle) {
+		GameSystem::get().toTitle = false;
+		//player.init();
+		map.init();
+		UseOperator::get().init();
+		changeScene(L"Title");
 	}
 }
 
@@ -51,7 +61,7 @@ void Action::draw() const {
 		player.draw();
 
 	}
-
+	ui.draw();
 	if (GameSystem::get().openMenu) {
 		GameSystem::get().drawMenu();
 	}

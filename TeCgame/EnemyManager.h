@@ -14,4 +14,5 @@ public:
 	EnemyManager(String _type);
 
 	void useUpdate(PhysicsWorld& world);
+	void init();
 };

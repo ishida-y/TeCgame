@@ -22,4 +22,5 @@ public:
 	void checkUsing(Vec2 player);
 	void update(Player& player, const double time_speed);
 	void draw();
+	void init();
 };
