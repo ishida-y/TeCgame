@@ -7,9 +7,9 @@ Enemy::Enemy(String _name, Vec2 _pos, double _rot, Vec2 _scale, int _alpha) :
 	hp(100),
 	range(RectF((obj.pos - TextureAsset(obj.name).size / 2.0) / 100.0, TextureAsset(obj.name).size / 100.0)),
 	pos(range._get_center()),
-	velocity(0,0),
+	velocity(0, 0),
 	atc_c(0),
-	dir(1),
+	dir(-1),
 	flag(),
 	c_move(0),
 	atc_damage(0),
@@ -25,7 +25,7 @@ Enemy::Flag::Flag() :
 	attack(false) {
 
 }
-	
+
 
 void Enemy::use(PhysicsWorld& world) {
 	obj.isUsing = true;
@@ -44,7 +44,7 @@ void Enemy::disuse() {
 void Enemy::update(const Player& player, const std::vector<std::shared_ptr<Block>>& obj, const double time_speed) {
 
 	reflectPhysics();
-	check_hit(player, time_speed);
+	checkHit(player, time_speed);
 	attack(obj, time_speed);
 	move(player, time_speed);
 	check_dir();
@@ -54,10 +54,10 @@ void Enemy::update(const Player& player, const std::vector<std::shared_ptr<Block
 void Enemy::reflectPhysics() {
 	range.pos = body->getPos();
 	pos = range._get_center();
-
+	velocity = body->getVelocity();
 }
 
-void Enemy::check_hit(const Player& player, const double time_speed) {
+void Enemy::checkHit(const Player& player, const double time_speed) {
 	if (flag.hit) {
 		hitCount += time_speed;
 		if (hitCount > 30) {
@@ -79,6 +79,7 @@ void Enemy::check_hit(const Player& player, const double time_speed) {
 				hitCount = 0;
 				hitPlayerAttack.emplace_back(pAttack);
 				dir = -pAttack->DIR;
+				hp -= pAttack->POWER;
 			}
 		}
 	}
@@ -91,14 +92,7 @@ void Enemy::check_hit(const Player& player, const double time_speed) {
 }
 
 void Enemy::check_dir() {
-	if (!flag.hit) {
-		if (body->getVelocity().x > 0 && dir == -1) {
-			dir = 1;
-		}
-		else if (body->getVelocity().x < 0 && dir == 1) {
-			dir = -1;
-		}
-	}
+
 }
 
 void Enemy::check_dead() {
@@ -122,16 +116,22 @@ Tank::Tank(String _name, Vec2 _pos, double _rot, Vec2 _scale, int _alpha) :
 }
 
 void Tank::attack(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed) {
-	if (flag.attack) {
-		attackCount += time_speed;
-		if (attackCount > 30) {
-			attackCount = 0.0;
-			flag.attack = false;
-		}
+	if (flag.hit) {
+		attackCount = 0;
+		flag.attack = false;
 	}
 	else {
-		attacks.emplace_back(std::make_shared<TankShoot>(pos + Vec2(dir*range.size.x / 2.0, 0), dir));
-		flag.attack = true;
+		if (flag.attack) {
+			attackCount += time_speed;
+			if (attackCount > 30) {
+				attackCount = 0.0;
+				flag.attack = false;
+			}
+		}
+		else {
+			attacks.emplace_back(std::make_shared<TankShoot>(pos + Vec2(dir*range.size.x / 2.0, 0), dir));
+			flag.attack = true;
+		}
 	}
 
 	for (auto elem : attacks) {
@@ -145,8 +145,13 @@ void Tank::attack(const std::vector<std::shared_ptr<Block>>& obj, const double& 
 }
 
 void Tank::move(const Player& player, const double time_speed) {
-	if (flag.hit && hitCount == 0) {
-		body->setVelocity(Vec2(-dir*5.0, -5.0));
+	if (flag.hit) {
+		if (hitCount == 0) {
+			body->setVelocity(Vec2(-dir*3.0, -3.0));
+		}
+	}
+	else {
+		body->setVelocity(Vec2(dir * 0.5, velocity.y));
 	}
 }
 
@@ -158,6 +163,8 @@ void Tank::draw() const {
 	Circle(pos, 0.1).draw(Palette::Orange);
 	Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * dir, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
 
+
+	Println(L"hp:", hp);// .drawCenter(pos - Vec2(0.0, 0.1));
 
 	for (auto elem : attacks) {
 		elem->draw();

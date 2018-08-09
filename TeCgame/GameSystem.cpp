@@ -86,8 +86,8 @@ void KeyInput::update() {
 		triggerL = XInput(0).leftTrigger;
 	}
 	else if (Gamepad(0).isConnected()) {
-		triggerR = Gamepad(0).u;
-		triggerL = Gamepad(0).v;
+		triggerR = Gamepad(0).button(7).pressed;
+		triggerL = Gamepad(0).button(6).pressed;
 	}
 	else {
 		if (Input::KeyLBracket.pressed) {

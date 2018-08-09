@@ -49,6 +49,7 @@ private:
 		int slashPhase;
 		//int jumpPhase;
 		bool notDoubleJumpYet;
+		bool notSlashInAirYet;
 		bool hit;
 
 		Flag();
@@ -63,6 +64,7 @@ private:
 	const static double MAX_SPEED_GROUND; //地上での横移動の最大速度
 	const static double MAX_SPEED_AIR; //空中での横移動の最大速度
 	const static double FORCE_AIR; //空中横移動の際の力の強さ
+	const static double FORCE_JUMP; //縦方向ジャンプ力
 	const static int JUMP_LIMIT; //ジャンプ入力受付時間
 	const static int SLASH_LIMIT; //slash状態解除までのフレーム数
 	const static int SLASH_COOLTIME; //次の攻撃が入力できるまでのフレーム数

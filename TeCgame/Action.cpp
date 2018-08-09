@@ -24,10 +24,13 @@ void Action::update() {
 		GameSystem::get().updateMenu();
 	}
 	else {
+		UseOperator::get().checkUsing(player.pos);
+
 		player.update(UseOperator::get().useEnemies, UseOperator::get().useBlocks, time_speed);
 		map.update(time_speed);
 		UseOperator::get().update(player, time_speed);
 		ui.update(player, time_speed);
+
 		camera.update(player.pos);
 	}
 
@@ -57,7 +60,7 @@ void Action::draw() const {
 		map.draw(camera.pos);
 		UseOperator::get().draw();
 		//—Ž‰º—p
-		RectF(Vec2(player.pos.x - 10, 5), Vec2(20, 100)).draw(Palette::Black);
+		RectF(Vec2(player.pos.x - 15, 5), Vec2(30, 100)).draw(Palette::Black);
 		player.draw();
 
 	}
