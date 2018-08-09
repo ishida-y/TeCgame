@@ -8,12 +8,8 @@ Enemy::Enemy(String _name, Vec2 _pos, double _rot, Vec2 _scale, int _alpha) :
 	range(RectF((obj.pos - TextureAsset(obj.name).size / 2.0) / 100.0, TextureAsset(obj.name).size / 100.0)),
 	pos(range._get_center()),
 	velocity(0, 0),
-	atc_c(0),
 	dir(-1),
 	flag(),
-	c_move(0),
-	atc_damage(0),
-	hit_damage(0),
 	attackCount(0.0),
 	hitCount(0.0) {
 
@@ -22,7 +18,8 @@ Enemy::Enemy(String _name, Vec2 _pos, double _rot, Vec2 _scale, int _alpha) :
 Enemy::Flag::Flag() :
 	isDead(false),
 	hit(false),
-	attack(false) {
+	attack(false),
+	nearPlayer(false) {
 
 }
 
@@ -44,17 +41,27 @@ void Enemy::disuse() {
 void Enemy::update(const Player& player, const std::vector<std::shared_ptr<Block>>& obj, const double time_speed) {
 
 	reflectPhysics();
+	checkDistance(player);
 	checkHit(player, time_speed);
 	attack(obj, time_speed);
 	move(player, time_speed);
-	check_dir();
-	check_dead();
+	checkDir(player);
+	checkDead();
 }
 
 void Enemy::reflectPhysics() {
 	range.pos = body->getPos();
 	pos = range._get_center();
 	velocity = body->getVelocity();
+}
+
+void Enemy::checkDistance(const Player& player) {
+	if (pos.distanceFrom(player.pos) < 6) {
+		flag.nearPlayer = true;
+	}
+	else {
+		flag.nearPlayer = false;
+	}
 }
 
 void Enemy::checkHit(const Player& player, const double time_speed) {
@@ -91,14 +98,21 @@ void Enemy::checkHit(const Player& player, const double time_speed) {
 
 }
 
-void Enemy::check_dir() {
-
+void Enemy::checkDir(const Player& player) {
+	if (flag.nearPlayer && !flag.hit) {
+		if (pos.x < player.pos.x - 1) {
+			dir = 1;
+		}
+		else if (pos.x > player.pos.x + 1) {
+			dir = -1;
+		}
+	}
 }
 
-void Enemy::check_dead() {
-	//if (range.pos.y > 1000) {
-	//	flag.isDead = true;
-	//}
+void Enemy::checkDead() {
+	if (range.pos.y > 1000) {
+		flag.isDead = true;
+	}
 	if (hp <= 0) {
 		flag.isDead = true;
 	}
@@ -113,6 +127,9 @@ void Enemy::init() {
 Tank::Tank(String _name, Vec2 _pos, double _rot, Vec2 _scale, int _alpha) :
 	Enemy(_name, _pos, _rot, _scale, _alpha) {
 
+	TextureAsset::Register(L"tank_01", L"Data/enemy/pen_01.png");
+	TextureAsset::Register(L"tank_02", L"Data/enemy/pen_02.png");
+	TextureAsset::Register(L"tank_hit", L"Data/enemy/hit_pen.png");
 }
 
 void Tank::attack(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed) {
@@ -128,8 +145,8 @@ void Tank::attack(const std::vector<std::shared_ptr<Block>>& obj, const double& 
 				flag.attack = false;
 			}
 		}
-		else {
-			attacks.emplace_back(std::make_shared<TankShoot>(pos + Vec2(dir*range.size.x / 2.0, 0), dir));
+		else if(flag.nearPlayer) {
+			attacks.emplace_back(std::make_shared<TankShoot>(pos + Vec2(dir*range.size.x / 2.0, -range.size.y / 5), dir));
 			flag.attack = true;
 		}
 	}
@@ -151,27 +168,58 @@ void Tank::move(const Player& player, const double time_speed) {
 		}
 	}
 	else {
-		body->setVelocity(Vec2(dir * 0.5, velocity.y));
+		if (flag.nearPlayer) {
+			body->setVelocity(Vec2(dir * 0.5, velocity.y));
+		}
+		else {
+			body->setVelocity(Vec2(0.0, velocity.y));
+		}
 	}
 }
 
 void Tank::draw() const {
 
 	if (GameSystem::get().debug) {
-		//TextureAsset(obj.name).scale(obj.scale / 100.0).rotate(obj.rot).draw(obj.pos / 100.0 - TextureAsset(obj.name).size / 2.0 / 100.0, Color(255, 255, 255, obj.alpha));
 		range.draw(Palette::Darkviolet);
-		//body->draw(Palette::Violet);
 
 		Circle(pos, 0.1).draw(Palette::Orange);
 		Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * dir, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
 
 
-		Println(L"hp:", hp);// .drawCenter(pos - Vec2(0.0, 0.1));
+		Println(L"hp:", hp);
 
-		for (auto elem : attacks) {
-			elem->draw();
+	}
+
+	if (flag.nearPlayer) {
+		if (dir == 1) {
+			TextureAsset(L"tank_02").scale(range.size.y / (TextureAsset(L"tank_02").height - 15)).mirror().drawAt(pos);
+		}
+		else if (dir == -1) {
+			TextureAsset(L"tank_02").scale(range.size.y / (TextureAsset(L"tank_02").height - 15)).drawAt(pos);
 		}
 	}
+	else {
+		if (dir == 1) {
+			TextureAsset(L"tank_01").scale(range.size.y / (TextureAsset(L"tank_01").height - 15)).mirror().drawAt(pos);
+		}
+		else if (dir == -1) {
+			TextureAsset(L"tank_01").scale(range.size.y / (TextureAsset(L"tank_01").height - 15)).drawAt(pos);
+		}
+
+	}
+	for (auto elem : attacks) {
+		elem->draw();
+	}
+
+	if (flag.hit) {
+		static Vec2 effectPos;
+		if (hitCount == 0) {
+			effectPos = Vec2(Random<double>(-range.size.x / 4, range.size.x / 4), Random<double>(-range.size.y / 4, range.size.y / 4));
+		}
+		TextureAsset(L"tank_hit").scale(1.0 / TextureAsset(L"tank_hit").height).drawAt(pos + effectPos);
+
+	}
+
 }
 
 

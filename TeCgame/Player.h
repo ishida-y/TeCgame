@@ -37,6 +37,7 @@ private:
 	double slashCount;
 	double shootCount;
 	double hitCount;
+	double wallJumpCount;
 
 	class Flag {
 	public:
@@ -44,10 +45,10 @@ private:
 		bool onRightWall;
 		bool onLeftWall;
 		bool inRising;
+		bool wallJump;
 		bool slash;
 		bool shoot;
 		int slashPhase;
-		//int jumpPhase;
 		bool notDoubleJumpYet;
 		bool notSlashInAirYet;
 		bool hit;
@@ -81,5 +82,5 @@ private:
 	void addSlash();
 	void shoot(const double& time_speed);
 	void attack(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed);
-	void checkHit(/*const EnemyManager& enemymanager*/const std::vector<std::shared_ptr<Enemy>>& enemys, const double& time_speed);
+	void checkHit(const std::vector<std::shared_ptr<Enemy>>& enemys, const double& time_speed);
 };

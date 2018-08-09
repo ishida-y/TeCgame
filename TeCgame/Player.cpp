@@ -28,9 +28,17 @@ Player::Player(PhysicsWorld& world) :
 	velocity(0, 0),
 	flag(),
 	jumpCount(0.0),
+	wallJumpCount(0.0),
 	slashCount(0.0),
 	shootCount(0.0),
 	hitCount(0.0) {
+
+	TextureAsset::Register(L"chika_stand", L"Data/chika/chika_01.png");
+	TextureAsset::Register(L"chika_run", L"Data/chika/chika_02.png");
+	TextureAsset::Register(L"chika_slash", L"Data/chika/chika_03.png");
+	TextureAsset::Register(L"chika_hit", L"Data/chika/hit_chika.png");
+
+
 
 	body.setGravityScale(2.0);
 	body.setFixedRotation(true);
@@ -51,6 +59,7 @@ Player::Flag::Flag() :
 	onGround(false),
 	onRightWall(false),
 	inRising(false),
+	wallJump(false),
 	notDoubleJumpYet(true),
 	notSlashInAirYet(true),
 	slash(false),
@@ -60,7 +69,7 @@ Player::Flag::Flag() :
 
 }
 
-void Player::update(/*const EnemyManager& enemymanager*/const std::vector<std::shared_ptr<Enemy>>& enemys, const std::vector<std::shared_ptr<Block>>& obj, double& time_speed) {
+void Player::update(const std::vector<std::shared_ptr<Enemy>>& enemys, const std::vector<std::shared_ptr<Block>>& obj, double& time_speed) {
 	timeControl(time_speed);
 	reflectPhysics();
 	checkHit(/*enemymanager*/enemys, time_speed);
@@ -101,7 +110,7 @@ void Player::reflectPhysics() {
 
 }
 
-void Player::checkHit(/*const EnemyManager& enemymanager*/const std::vector<std::shared_ptr<Enemy>>& enemys, const double& time_speed) {
+void Player::checkHit(const std::vector<std::shared_ptr<Enemy>>& enemys, const double& time_speed) {
 	if (flag.hit) {
 		hitCount += time_speed;
 		if (hitCount > 15) {
@@ -291,11 +300,11 @@ void Player::checkTouch(const std::vector<std::shared_ptr<Block>>& obj) {
 			break;
 		}
 		else if (range.bottomLeft.intersects(elem->range)) {
-			flag.onRightWall = true;
+			flag.onLeftWall = true;
 			break;
 		}
 		else if (range.bottomRight.intersects(elem->range)) {
-			flag.onLeftWall = true;
+			flag.onRightWall = true;
 			break;
 		}
 	}
@@ -313,17 +322,22 @@ void Player::jump(const std::vector<std::shared_ptr<Block>>& obj, const double& 
 	}
 	else if (GameSystem::get().input.jump.get_clicked()) {
 		if (flag.onRightWall) {
-			body.setVelocity(Vec2(5.0, FORCE_JUMP));
-			flag.inRising = true;
-			flag.notDoubleJumpYet = false;
-			jumpCount = 0;
-
-		}
-		else if (flag.onLeftWall) {
 			body.setVelocity(Vec2(-5.0, FORCE_JUMP));
 			flag.inRising = true;
 			flag.notDoubleJumpYet = false;
 			jumpCount = 0;
+			flag.wallJump = true;
+			wallJumpCount = 0;
+			dir = -1;
+		}
+		else if (flag.onLeftWall) {
+			body.setVelocity(Vec2(5.0, FORCE_JUMP));
+			flag.inRising = true;
+			flag.notDoubleJumpYet = false;
+			jumpCount = 0;
+			flag.wallJump = true;
+			wallJumpCount = 0;
+			dir = 1;
 		}
 		else if (flag.notDoubleJumpYet) {
 			body.setVelocity(Vec2(velocity.x, FORCE_JUMP));
@@ -348,11 +362,18 @@ void Player::jump(const std::vector<std::shared_ptr<Block>>& obj, const double& 
 			jumpCount = 0;
 		}
 	}
+	if (flag.wallJump) {
+		wallJumpCount += time_speed;
+		if (wallJumpCount > 15) {
+			wallJumpCount = 0;
+			flag.wallJump = false;
+		}
+	}
 
 }
 
 void Player::checkDir() {
-	if (!flag.hit && !flag.slash) {
+	if (!flag.hit && !flag.slash && !flag.wallJump) {
 		if (GameSystem::get().input.stick.L.x > 0.1 && dir == -1) {
 			dir = 1;
 		}
@@ -363,7 +384,6 @@ void Player::checkDir() {
 }
 
 void Player::draw() const {
-
 	if (GameSystem::get().debug) {
 		range.body.draw();
 		Circle(pos, 0.05).draw(Palette::Red);
@@ -379,5 +399,45 @@ void Player::draw() const {
 		for (auto elem : attacks) {
 			elem->draw();
 		}
+	}
+
+	if (flag.slash && slashCount < SLASH_COOLTIME) {
+		if (dir == 1) {
+			TextureAsset(L"chika_slash").scale(PLAYER_SIZE.y / TextureAsset(L"chika_slash").height).mirror().drawAt(pos);
+
+		}
+		else if (dir == -1) {
+			TextureAsset(L"chika_slash").scale(PLAYER_SIZE.y / TextureAsset(L"chika_slash").height).drawAt(pos);
+		}
+	}
+	else {
+		if (velocity.x == 0) {
+			if (dir == 1) {
+				TextureAsset(L"chika_stand").scale(PLAYER_SIZE.y / TextureAsset(L"chika_stand").height).mirror().drawAt(pos);
+
+			}
+			else if (dir == -1) {
+				TextureAsset(L"chika_stand").scale(PLAYER_SIZE.y / TextureAsset(L"chika_stand").height).drawAt(pos);
+			}
+		}
+		else {
+			if (dir == 1) {
+				TextureAsset(L"chika_run").scale(PLAYER_SIZE.y / TextureAsset(L"chika_run").height).mirror().drawAt(pos);
+
+			}
+			else if (dir == -1) {
+				TextureAsset(L"chika_run").scale(PLAYER_SIZE.y / TextureAsset(L"chika_run").height).drawAt(pos);
+			}
+
+		}
+	}
+
+	if (flag.hit) {
+		static Vec2 effectPos;
+		if (hitCount == 0) {
+			effectPos = Vec2(Random<double>(-PLAYER_SIZE.x / 2, PLAYER_SIZE.x / 2), Random<double>(-PLAYER_SIZE.y / 4, PLAYER_SIZE.y / 4));
+		}
+		TextureAsset(L"chika_hit").scale(0.5 / TextureAsset(L"chika_hit").height).drawAt(pos + effectPos);
+
 	}
 }

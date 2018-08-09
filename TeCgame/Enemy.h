@@ -17,17 +17,14 @@ public:
 	Vec2 pos;
 	Vec2 velocity;
 	int hp;
-	int atc_c;
 	int dir;
-	int c_move;
-	int atc_damage;
-	int hit_damage;
 
 	class Flag {
 	public:
 		bool isDead;
 		bool hit;
 		bool attack;
+		bool nearPlayer;
 
 		Flag();
 	} flag;
@@ -51,9 +48,10 @@ protected:
 	virtual void attack(const std::vector<std::shared_ptr<Block>>& obj, const double& time_speed) = 0;
 	virtual void move(const Player& player, const double time_speed) = 0;
 	void reflectPhysics();
-	void check_dir();
+	void checkDir(const Player& player);
 	void checkHit(const Player& player, const double time_speed);
-	void check_dead();
+	void checkDead();
+	void checkDistance(const Player& player);
 };
 
 
