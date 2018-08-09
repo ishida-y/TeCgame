@@ -1,5 +1,6 @@
 #include"Attack.h"
 #include"BlockManager.h"
+#include "GameSystem.h"
 
 Attack::Attack(Vec2 _pos, RectF _range, int _DIR, int _VANISH_LIMIT, int _POWER) :
 	count(0),
@@ -107,29 +108,41 @@ void TankShoot::update(const std::vector<std::shared_ptr<Block>>& obj, const dou
 }
 
 void Slash1::draw() {
-	range.draw(Palette::Red);
-	Triangle(pos + Vec2(0, -5)/100.0, pos + Vec2(10 * DIR, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+	if (GameSystem::get().debug) {
+		range.draw(Palette::Red);
+		Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * DIR, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+	}
 }
 void Slash2::draw() {
-	range.draw(Palette::Orange);
-	Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * DIR, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+	if (GameSystem::get().debug) {
+		range.draw(Palette::Orange);
+		Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * DIR, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+	}
 }
 void Slash3::draw() {
-	range.draw(Palette::Yellow);
-	Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * DIR, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+	if (GameSystem::get().debug) {
+		range.draw(Palette::Yellow);
+		Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * DIR, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+	}
 }
 
 void DogSlash::draw() {
-	range.draw(Palette::Orange);
-	Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * DIR, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+	if (GameSystem::get().debug) {
+		range.draw(Palette::Orange);
+		Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * DIR, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+	}
 }
 
 void Shoot::draw() {
-	range.draw(Palette::Blue);
-	Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * DIR, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+	if (GameSystem::get().debug) {
+		range.draw(Palette::Blue);
+		Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * DIR, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+	}
 }
 
 void TankShoot::draw() {
-	range.draw(Palette::Cornflowerblue);
-	Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * DIR, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+	if (GameSystem::get().debug) {
+		range.draw(Palette::Cornflowerblue);
+		Triangle(pos + Vec2(0, -5) / 100.0, pos + Vec2(10 * DIR, 0) / 100.0, pos + Vec2(0, 5) / 100.0).draw();
+	}
 }

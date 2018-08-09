@@ -3,9 +3,9 @@
 const bool GameSystem::debug = true;
 
 GameSystem::GameSystem() :
-openMenu(false),
-menuMode(1),
-toTitle(false){
+	openMenu(false),
+	menuMode(1),
+	toTitle(false) {
 	TextureAsset::Register(L"pose_exit", L"Data/pose/pose_exit.png");
 	TextureAsset::Register(L"pose_title", L"Data/pose/pose_title.png");
 }
